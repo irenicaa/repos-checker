@@ -27,18 +27,14 @@ func CompareRepos(
 		leftRepos[item.Name] = item
 	}
 
+	rightRepos := map[string]models.RepoState{}
+	for _, item := range right.Repos {
+		rightRepos[item.Name] = item
+	}
+
 	sourceDiff := SourceDiff{}
 	for _, itemLeft := range left.Repos {
-		found := false
-		foundItem := models.RepoState{}
-		for _, itemRight := range right.Repos {
-			if itemLeft.Name == itemRight.Name {
-				found = true
-				foundItem = itemRight
-
-				break
-			}
-		}
+		foundItem, found := rightRepos[itemLeft.Name]
 		if !found {
 			sourceDiff.MissedInRight = append(sourceDiff.MissedInRight, itemLeft)
 			continue
