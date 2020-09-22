@@ -41,10 +41,15 @@ func CompareRepos(
 		}
 	}
 	for _, itemRight := range right.Repos {
+		found := false
 		for _, itemLeft := range left.Repos {
-			if itemRight.Name != itemLeft.Name {
-				sourceDiff.MissedInLeft = append(sourceDiff.MissedInRight, itemRight)
+			if itemRight.Name == itemLeft.Name {
+				found = true
+				break
 			}
+		}
+		if !found {
+			sourceDiff.MissedInLeft = append(sourceDiff.MissedInRight, itemRight)
 		}
 	}
 
