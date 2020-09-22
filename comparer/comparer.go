@@ -25,9 +25,12 @@ func CompareRepos(
 	sourceDiff := SourceDiff{}
 	for _, itemLeft := range left.Repos {
 		found := false
+		foundItem := models.RepoState{}
 		for _, itemRight := range right.Repos {
 			if itemLeft.Name == itemRight.Name {
 				found = true
+				foundItem = itemRight
+
 				break
 			}
 		}
@@ -36,18 +39,14 @@ func CompareRepos(
 			continue
 		}
 
-		for _, itemRight := range right.Repos {
-			if itemLeft.Name == itemRight.Name {
-				if itemLeft.LastCommit == itemRight.LastCommit {
-					sourceDiff.Equal = append(sourceDiff.Equal, itemLeft)
-				} else {
-					sourceDiff.Diff = append(sourceDiff.Diff, RepoDiff{
-						Name:              itemLeft.Name,
-						LastCommitInLeft:  itemLeft.LastCommit,
-						LastCommitInRight: itemRight.LastCommit,
-					})
-				}
-			}
+		if itemLeft.LastCommit == foundItem.LastCommit {
+			sourceDiff.Equal = append(sourceDiff.Equal, itemLeft)
+		} else {
+			sourceDiff.Diff = append(sourceDiff.Diff, RepoDiff{
+				Name:              itemLeft.Name,
+				LastCommitInLeft:  itemLeft.LastCommit,
+				LastCommitInRight: foundItem.LastCommit,
+			})
 		}
 	}
 	for _, itemRight := range right.Repos {
