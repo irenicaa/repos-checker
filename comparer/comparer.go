@@ -24,6 +24,18 @@ func CompareRepos(
 ) SourceDiff {
 	sourceDiff := SourceDiff{}
 	for _, itemLeft := range left.Repos {
+		found := false
+		for _, itemRight := range right.Repos {
+			if itemLeft.Name == itemRight.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			sourceDiff.MissedInRight = append(sourceDiff.MissedInRight, itemLeft)
+			continue
+		}
+
 		for _, itemRight := range right.Repos {
 			if itemLeft.Name == itemRight.Name {
 				if itemLeft.LastCommit == itemRight.LastCommit {
@@ -35,8 +47,6 @@ func CompareRepos(
 						LastCommitInRight: itemRight.LastCommit,
 					})
 				}
-			} else {
-				sourceDiff.MissedInRight = append(sourceDiff.MissedInRight, itemLeft)
 			}
 		}
 	}
