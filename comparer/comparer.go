@@ -11,6 +11,8 @@ type RepoDiff struct {
 
 // SourceDiff ...
 type SourceDiff struct {
+	NameOfLeft    string
+	NameOfRight   string
 	Equal         []models.RepoState
 	Diff          []RepoDiff
 	MissedInLeft  []models.RepoState
@@ -32,7 +34,7 @@ func CompareRepos(
 		rightRepos[item.Name] = item
 	}
 
-	sourceDiff := SourceDiff{}
+	sourceDiff := SourceDiff{NameOfLeft: left.Name, NameOfRight: right.Name}
 	for _, itemLeft := range left.Repos {
 		foundItem, found := rightRepos[itemLeft.Name]
 		if !found {
