@@ -2,13 +2,6 @@ package comparer
 
 import "github.com/irenicaa/repos-checker/models"
 
-// RepoDiff ...
-type RepoDiff struct {
-	Name              string
-	LastCommitInLeft  string
-	LastCommitInRight string
-}
-
 // SourceDiff ...
 type SourceDiff struct {
 	NameOfLeft    string
@@ -19,16 +12,21 @@ type SourceDiff struct {
 	MissedInRight []models.RepoState
 }
 
+// RepoDiff ...
+type RepoDiff struct {
+	Name              string
+	LastCommitInLeft  string
+	LastCommitInRight string
+}
+
 // CompareRepos ...
 func CompareRepos(
 	left models.SourceState,
 	right models.SourceState,
 ) SourceDiff {
-	leftRepos := makeRepoIndex(left)
+	sourceDiff := SourceDiff{NameOfLeft: left.Name, NameOfRight: right.Name}
 
 	rightRepos := makeRepoIndex(right)
-
-	sourceDiff := SourceDiff{NameOfLeft: left.Name, NameOfRight: right.Name}
 	for _, itemLeft := range left.Repos {
 		foundItem, found := rightRepos[itemLeft.Name]
 		if !found {
@@ -46,9 +44,10 @@ func CompareRepos(
 			})
 		}
 	}
+
+	leftRepos := makeRepoIndex(left)
 	for _, itemRight := range right.Repos {
-		_, found := leftRepos[itemRight.Name]
-		if !found {
+		if _, found := leftRepos[itemRight.Name]; !found {
 			sourceDiff.MissedInLeft = append(sourceDiff.MissedInRight, itemRight)
 		}
 	}
