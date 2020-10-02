@@ -19,6 +19,20 @@ type RepoDiff struct {
 	LastCommitInRight string
 }
 
+// CompareSources ...
+func CompareSources(
+	sources []models.SourceState,
+	reference models.SourceState,
+) []SourceDiff {
+	sourceDiffs := []SourceDiff{}
+	for _, source := range sources {
+		diff := CompareRepos(source, reference)
+		sourceDiffs = append(sourceDiffs, diff)
+	}
+
+	return sourceDiffs
+}
+
 // CompareRepos ...
 func CompareRepos(
 	left models.SourceState,
