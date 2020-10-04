@@ -26,8 +26,8 @@ func CompareSources(
 ) []SourceDiff {
 	sourceDiffs := []SourceDiff{}
 	for _, source := range sources {
-		diff := CompareRepos(source, reference)
-		sourceDiffs = append(sourceDiffs, diff)
+		sourceDiff := CompareRepos(source, reference)
+		sourceDiffs = append(sourceDiffs, sourceDiff)
 	}
 
 	return sourceDiffs
