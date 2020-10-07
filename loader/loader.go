@@ -10,12 +10,12 @@ type Source interface {
 
 // LoadSources ...
 func LoadSources(sources []Source) []models.SourceState {
-	sourceStates := []models.SourceState{}
-	for _, source := range sources {
-		sourceStates = append(sourceStates, models.SourceState{
+	sourceStates := make([]models.SourceState, len(sources))
+	for index, source := range sources {
+		sourceStates[index] = models.SourceState{
 			Name:  source.Name(),
 			Repos: source.LoadRepos(),
-		})
+		}
 	}
 
 	return sourceStates
