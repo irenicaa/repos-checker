@@ -9,7 +9,7 @@ import (
 // Source ...
 type Source interface {
 	Name() string
-	LoadRepos() []models.RepoState
+	LoadRepos() ([]models.RepoState, error)
 }
 
 // Logger ...
@@ -27,9 +27,15 @@ func LoadSources(sources []Source) []models.SourceState {
 		go func(index int, source Source) {
 			defer waiter.Done()
 
+			name := source.Name()
+			repos, err := source.LoadRepos()
+			if err != nil {
+				return
+			}
+
 			sourceStates[index] = models.SourceState{
-				Name:  source.Name(),
-				Repos: source.LoadRepos(),
+				Name:  name,
+				Repos: repos,
 			}
 		}(index, source)
 	}
