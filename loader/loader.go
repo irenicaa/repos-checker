@@ -18,7 +18,7 @@ type Logger interface {
 }
 
 // LoadSources ...
-func LoadSources(sources []Source) []models.SourceState {
+func LoadSources(sources []Source, logger Logger) []models.SourceState {
 	waiter := sync.WaitGroup{}
 	waiter.Add(len(sources))
 
@@ -30,6 +30,7 @@ func LoadSources(sources []Source) []models.SourceState {
 			name := source.Name()
 			repos, err := source.LoadRepos()
 			if err != nil {
+				logger.Printf("unable to load repos from the %s source: %s", name, err)
 				return
 			}
 
