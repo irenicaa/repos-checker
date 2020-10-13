@@ -12,6 +12,11 @@ type Source interface {
 	LoadRepos() []models.RepoState
 }
 
+// Logger ...
+type Logger interface {
+	Printf(format string, arguments ...interface{})
+}
+
 // LoadSources ...
 func LoadSources(sources []Source) []models.SourceState {
 	waiter := sync.WaitGroup{}
