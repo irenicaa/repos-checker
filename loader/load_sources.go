@@ -6,12 +6,6 @@ import (
 	"github.com/irenicaa/repos-checker/models"
 )
 
-// Source ...
-type Source interface {
-	Name() string
-	LoadRepos() ([]models.RepoState, error)
-}
-
 // Logger ...
 type Logger interface {
 	Printf(format string, arguments ...interface{})
