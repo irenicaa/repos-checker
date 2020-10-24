@@ -7,17 +7,11 @@ import (
 	"github.com/irenicaa/repos-checker/loader/sources/github"
 )
 
-// User ...
-type User struct {
-	Name      string
-	Followers int
-}
-
 func main() {
-	var user User
-	if err := github.SendRequest("/users/irenicaa", nil, &user); err != nil {
+	repoState, err := github.GetLastCommit("irenicaa", "repos-checker")
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v	\n", user)
+	fmt.Printf("%+v\n", repoState)
 }
