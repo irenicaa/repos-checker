@@ -14,7 +14,12 @@ func SendRequest(
 	parameters url.Values,
 	responseData interface{},
 ) error {
-	url := "https://api.github.com" + endpoint + parameters.Encode()
+	url := fmt.Sprintf(
+		"https://api.github.com%s?%s",
+		endpoint,
+		parameters.Encode(),
+	)
+
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return fmt.Errorf("unable to create the request: %v", err)
