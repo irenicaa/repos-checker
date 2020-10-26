@@ -10,10 +10,9 @@ import (
 
 func main() {
 	pageSize := flag.Int("pageSize", 100, "")
-	page := flag.Int("page", 1, "")
 	flag.Parse()
 
-	repos, err := github.GetReposPage("irenicaa", *pageSize, *page)
+	repos, err := github.GetRepos("irenicaa", *pageSize)
 	if err != nil {
 		log.Fatal(err)
 	}
