@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -8,10 +9,14 @@ import (
 )
 
 func main() {
-	repoState, err := github.GetLastCommit("irenicaa", "repos-checker")
+	pageSize := flag.Int("pageSize", 100, "")
+	page := flag.Int("page", 1, "")
+	flag.Parse()
+
+	repos, err := github.GetReposPage("irenicaa", *pageSize, *page)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", repoState)
+	fmt.Printf("%+v\n", repos)
 }
