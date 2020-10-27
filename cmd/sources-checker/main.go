@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 
@@ -9,13 +8,11 @@ import (
 )
 
 func main() {
-	pageSize := flag.Int("pageSize", 100, "")
-	flag.Parse()
-
-	repos, err := github.GetRepos("irenicaa", *pageSize)
+	source := github.Source{Owner: "irenicaa"}
+	reposStates, err := source.LoadRepos()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", repos)
+	fmt.Printf("%s %+v\n", source.Name(), reposStates)
 }
