@@ -5,11 +5,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
 )
+
+// MakeURL ...
+func MakeURL(endpoint string, parameters url.Values) string {
+	return fmt.Sprintf(
+		"https://api.github.com%s?%s",
+		endpoint,
+		parameters.Encode(),
+	)
+}
 
 // MakeAuthHeader ...
 func MakeAuthHeader() (string, bool) {
@@ -30,12 +38,7 @@ func SendRequest(
 	parameters url.Values,
 	responseData interface{},
 ) error {
-	url := fmt.Sprintf(
-		"https://api.github.com%s?%s",
-		endpoint,
-		parameters.Encode(),
-	)
-
+	url := MakeURL(endpoint, parameters)
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return fmt.Errorf("unable to create the request: %v", err)
