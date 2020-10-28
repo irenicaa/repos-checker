@@ -1,12 +1,28 @@
 package github
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
 )
+
+// MakeAuthHeader ...
+func MakeAuthHeader() (string, bool) {
+	username, token := os.Getenv("GITHUB_USERNAME"), os.Getenv("GITHUB_TOKEN")
+	if username == "" || token == "" {
+		return "", false
+	}
+
+	credentials := username + ":" + token
+	credentials = base64.StdEncoding.EncodeToString([]byte(credentials))
+
+	return "Basic " + credentials, true
+}
 
 // SendRequest ...
 func SendRequest(
@@ -23,6 +39,11 @@ func SendRequest(
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return fmt.Errorf("unable to create the request: %v", err)
+	}
+
+	authHeader, ok := MakeAuthHeader()
+	if ok {
+		request.Header.Add("Authorization", authHeader)
 	}
 
 	response, err := http.DefaultClient.Do(request)
