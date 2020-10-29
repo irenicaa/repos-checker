@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -8,11 +9,19 @@ import (
 )
 
 func main() {
-	source := github.Source{Owner: "irenicaa"}
-	reposStates, err := source.LoadRepos()
-	if err != nil {
-		log.Fatal(err)
-	}
+	source := flag.String("source", "github", "")
+	flag.Parse()
 
-	fmt.Printf("%s %+v\n", source.Name(), reposStates)
+	switch *source {
+	case "github":
+		source := github.Source{Owner: "irenicaa"}
+		reposStates, err := source.LoadRepos()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("%s %+v\n", source.Name(), reposStates)
+	default:
+		log.Fatal("unknown source")
+	}
 }
