@@ -11,7 +11,6 @@ import (
 
 func main() {
 	source := flag.String("source", "bitbucket", "")
-	pageSize := flag.Int("pageSize", 100, "")
 	flag.Parse()
 
 	switch *source {
@@ -24,12 +23,13 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "bitbucket":
-		repoState, err := bitbucket.GetRepos("MartinFelis", *pageSize)
+		source := bitbucket.Source{Workspace: "MartinFelis"}
+		reposStates, err := source.LoadRepos()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%+v\n", repoState)
+		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	default:
 		log.Fatal("unknown source")
 	}
