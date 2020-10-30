@@ -11,6 +11,8 @@ import (
 
 func main() {
 	source := flag.String("source", "bitbucket", "")
+	pageSize := flag.Int("pageSize", 100, "")
+	page := flag.Int("page", 1, "")
 	flag.Parse()
 
 	switch *source {
@@ -23,7 +25,7 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "bitbucket":
-		repoState, err := bitbucket.GetLastCommit("MartinFelis", "love-android-sdl2")
+		repoState, err := bitbucket.GetReposPage("MartinFelis", *pageSize, *page)
 		if err != nil {
 			log.Fatal(err)
 		}
