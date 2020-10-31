@@ -1,11 +1,13 @@
 package bitbucket
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 )
 
 // MakeURL ...
@@ -15,6 +17,20 @@ func MakeURL(endpoint string, parameters url.Values) string {
 		endpoint,
 		parameters.Encode(),
 	)
+}
+
+// MakeAuthHeader ...
+func MakeAuthHeader() (string, bool) {
+	username, password :=
+		os.Getenv("BITBUCKET_USERNAME"), os.Getenv("BITBUCKET_PASSWORD")
+	if username == "" || password == "" {
+		return "", false
+	}
+
+	credentials := username + ":" + password
+	credentials = base64.StdEncoding.EncodeToString([]byte(credentials))
+
+	return "Basic " + credentials, true
 }
 
 // SendRequest ...
@@ -27,6 +43,11 @@ func SendRequest(
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return fmt.Errorf("unable to create the request: %v", err)
+	}
+
+	authHeader, ok := MakeAuthHeader()
+	if ok {
+		request.Header.Add("Authorization", authHeader)
 	}
 
 	response, err := http.DefaultClient.Do(request)
