@@ -13,7 +13,6 @@ import (
 func main() {
 	source := flag.String("source", "gitlab", "")
 	pageSize := flag.Int("pageSize", 100, "")
-	page := flag.Int("page", 1, "")
 	flag.Parse()
 
 	switch *source {
@@ -34,7 +33,7 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "gitlab":
-		reposPaths, err := gitlab.GetReposPage("dzaporozhets", *pageSize, *page)
+		reposPaths, err := gitlab.GetRepos("dzaporozhets", *pageSize)
 		if err != nil {
 			log.Fatal(err)
 		}
