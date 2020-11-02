@@ -12,6 +12,8 @@ import (
 
 func main() {
 	source := flag.String("source", "gitlab", "")
+	pageSize := flag.Int("pageSize", 100, "")
+	page := flag.Int("page", 1, "")
 	flag.Parse()
 
 	switch *source {
@@ -32,12 +34,12 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "gitlab":
-		repoState, err := gitlab.GetLastCommit("gitlab-org/gitlab")
+		reposPaths, err := gitlab.GetReposPage("dzaporozhets", *pageSize, *page)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%+v\n", repoState)
+		fmt.Printf("%+v\n", reposPaths)
 	default:
 		log.Fatal("unknown source")
 	}
