@@ -13,6 +13,8 @@ type commit struct {
 	SHA string `json:"id"`
 }
 
+var errNoCommits = errors.New("no commits")
+
 // GetLastCommit ...
 func GetLastCommit(repoPath string) (models.RepoState, error) {
 	parameters := url.Values{}
@@ -25,7 +27,7 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 		return models.RepoState{}, err
 	}
 	if len(commits) == 0 {
-		return models.RepoState{}, errors.New("no commits")
+		return models.RepoState{}, errNoCommits
 	}
 
 	_, repo := path.Split(repoPath)
