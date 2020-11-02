@@ -1,10 +1,14 @@
 package github
 
-import "github.com/irenicaa/repos-checker/models"
+import (
+	"github.com/irenicaa/repos-checker/loader"
+	"github.com/irenicaa/repos-checker/models"
+)
 
 // Source ...
 type Source struct {
-	Owner string
+	Owner  string
+	Logger loader.Logger
 }
 
 // Name ...
@@ -23,7 +27,15 @@ func (source Source) LoadRepos() ([]models.RepoState, error) {
 	var reposStates []models.RepoState
 	for _, repo := range repos {
 		repoState, err := GetLastCommit(source.Owner, repo)
-		if err != nil {
+		switch err {
+		case nil:
+		case errNoCommits:
+			source.Logger.Printf(
+				"%s repo that belongs to %s has no commits",
+				repo,
+				source.Owner,
+			)
+		default:
 			return nil, err
 		}
 
