@@ -7,12 +7,14 @@ import (
 	"os"
 
 	"github.com/irenicaa/repos-checker/loader/sources/bitbucket"
+	filesystem "github.com/irenicaa/repos-checker/loader/sources/file-system"
 	"github.com/irenicaa/repos-checker/loader/sources/github"
 	"github.com/irenicaa/repos-checker/loader/sources/gitlab"
 )
 
 func main() {
-	source := flag.String("source", "gitlab", "")
+	source := flag.String("source", "file-system", "")
+	basePath := flag.String("basePath", "..", "")
 	flag.Parse()
 
 	logger := log.New(os.Stderr, "", log.LstdFlags)
@@ -41,6 +43,13 @@ func main() {
 		}
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
+	case "file-system":
+		repos, err := filesystem.GetRepos(*basePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("%+v\n", repos)
 	default:
 		log.Fatal("unknown source")
 	}
