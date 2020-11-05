@@ -14,7 +14,7 @@ import (
 
 func main() {
 	source := flag.String("source", "file-system", "")
-	basePath := flag.String("basePath", "..", "")
+	repoPath := flag.String("repoPath", ".", "")
 	flag.Parse()
 
 	logger := log.New(os.Stderr, "", log.LstdFlags)
@@ -44,12 +44,12 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "file-system":
-		repos, err := filesystem.GetRepos(*basePath)
+		repoState, err := filesystem.GetLastCommit(*repoPath)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%+v\n", repos)
+		fmt.Printf("%+v\n", repoState)
 	default:
 		log.Fatal("unknown source")
 	}
