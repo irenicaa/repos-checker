@@ -23,7 +23,7 @@ func GetRepos(basePath string) ([]string, error) {
 		return nil, fmt.Errorf("unable to read a subdirectory list: %v", err)
 	}
 
-	var allRepos []string
+	var allReposPaths []string
 	for _, fileInfo := range filesInfos {
 		if !fileInfo.IsDir() {
 			continue
@@ -33,17 +33,20 @@ func GetRepos(basePath string) ([]string, error) {
 		}
 
 		directoryPath := filepath.Join(basePath, fileInfo.Name())
-		repos, err := GetRepos(directoryPath)
+		reposPaths, err := GetRepos(directoryPath)
 		switch err {
 		case nil:
 		case ErrItIsRepo:
-			allRepos = append(allRepos, directoryPath)
+			allReposPaths = append(allReposPaths, directoryPath)
 		default:
-			return nil, fmt.Errorf("unable to get repos from the subdirectory: %v", err)
+			return nil, fmt.Errorf(
+				"unable to get repos paths from the subdirectory: %v",
+				err,
+			)
 		}
 
-		allRepos = append(allRepos, repos...)
+		allReposPaths = append(allReposPaths, reposPaths...)
 	}
 
-	return allRepos, nil
+	return allReposPaths, nil
 }
