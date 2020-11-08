@@ -1,30 +1,23 @@
 package filesystem
 
 import (
-	"bytes"
 	"fmt"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/irenicaa/repos-checker/models"
+	systemutils "github.com/irenicaa/repos-checker/system-utils"
 )
 
 // GetLastCommit ...
 func GetLastCommit(repoPath string) (models.RepoState, error) {
-	command := exec.Command("git", "log", "--format=%H", "HEAD~..")
-	command.Dir = repoPath
-
-	var stdoutBuffer bytes.Buffer
-	command.Stdout = &stdoutBuffer
-
-	var stderrBuffer bytes.Buffer
-	command.Stderr = &stderrBuffer
-
-	if err := command.Run(); err != nil {
-		if errMessage := stderrBuffer.String(); errMessage != "" {
-			err = fmt.Errorf("%v: %q", err, stderrBuffer.String())
-		}
+	commandOutput, err := systemutils.RunCommand(
+		"git",
+		[]string{"log", "--format=%H", "HEAD~.."},
+		repoPath,
+		nil,
+	)
+	if err != nil {
 		return models.RepoState{}, fmt.Errorf(
 			"an error occurred while running the command: %v",
 			err,
@@ -42,7 +35,7 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 	_, repo := filepath.Split(absoluteRepoPath)
 	repoState := models.RepoState{
 		Name:       repo,
-		LastCommit: strings.TrimSpace(stdoutBuffer.String()),
+		LastCommit: strings.TrimSpace(string(commandOutput)),
 	}
 
 	return repoState, nil
