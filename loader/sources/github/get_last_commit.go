@@ -1,18 +1,16 @@
 package github
 
 import (
-	"errors"
 	"fmt"
 	"net/url"
 
+	sourceutils "github.com/irenicaa/repos-checker/loader/sources/source-utils"
 	"github.com/irenicaa/repos-checker/models"
 )
 
 type commit struct {
 	SHA string `json:"sha"`
 }
-
-var errNoCommits = errors.New("no commits")
 
 // GetLastCommit ...
 func GetLastCommit(owner string, repo string) (models.RepoState, error) {
@@ -25,7 +23,7 @@ func GetLastCommit(owner string, repo string) (models.RepoState, error) {
 		return models.RepoState{}, err
 	}
 	if len(commits) == 0 {
-		return models.RepoState{}, errNoCommits
+		return models.RepoState{}, sourceutils.ErrNoCommits
 	}
 
 	repoState := models.RepoState{Name: repo, LastCommit: commits[0].SHA}

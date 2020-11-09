@@ -1,19 +1,17 @@
 package gitlab
 
 import (
-	"errors"
 	"fmt"
 	"net/url"
 	"path"
 
+	sourceutils "github.com/irenicaa/repos-checker/loader/sources/source-utils"
 	"github.com/irenicaa/repos-checker/models"
 )
 
 type commit struct {
 	SHA string `json:"id"`
 }
-
-var errNoCommits = errors.New("no commits")
 
 // GetLastCommit ...
 func GetLastCommit(repoPath string) (models.RepoState, error) {
@@ -27,7 +25,7 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 		return models.RepoState{}, err
 	}
 	if len(commits) == 0 {
-		return models.RepoState{}, errNoCommits
+		return models.RepoState{}, sourceutils.ErrNoCommits
 	}
 
 	_, repo := path.Split(repoPath)
