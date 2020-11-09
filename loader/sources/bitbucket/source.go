@@ -2,6 +2,7 @@ package bitbucket
 
 import (
 	"github.com/irenicaa/repos-checker/loader"
+	sourceutils "github.com/irenicaa/repos-checker/loader/sources/source-utils"
 	"github.com/irenicaa/repos-checker/models"
 )
 
@@ -19,7 +20,9 @@ func (source Source) Name() string {
 // LoadRepos ...
 func (source Source) LoadRepos() ([]models.RepoState, error) {
 	const maxPageSize = 100
-	repos, err := GetRepos(source.Workspace, maxPageSize)
+	repos, err := sourceutils.GetAllPages(func(page int) ([]string, error) {
+		return GetReposPage(source.Workspace, maxPageSize, page)
+	})
 	if err != nil {
 		return nil, err
 	}
