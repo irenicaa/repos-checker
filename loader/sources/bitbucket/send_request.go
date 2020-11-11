@@ -1,10 +1,8 @@
 package bitbucket
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/url"
-	"os"
 
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
 )
@@ -18,20 +16,6 @@ func MakeURL(endpoint string, parameters url.Values) string {
 	)
 }
 
-// MakeAuthHeader ...
-func MakeAuthHeader() string {
-	username, password :=
-		os.Getenv("BITBUCKET_USERNAME"), os.Getenv("BITBUCKET_PASSWORD")
-	if username == "" || password == "" {
-		return ""
-	}
-
-	credentials := username + ":" + password
-	credentials = base64.StdEncoding.EncodeToString([]byte(credentials))
-
-	return "Basic " + credentials
-}
-
 // SendRequest ...
 func SendRequest(
 	endpoint string,
@@ -39,6 +23,7 @@ func SendRequest(
 	responseData interface{},
 ) error {
 	url := MakeURL(endpoint, parameters)
-	authHeader := MakeAuthHeader()
+	authHeader :=
+		systemutils.MakeBasicAuthHeader("BITBUCKET_USERNAME", "BITBUCKET_PASSWORD")
 	return systemutils.SendRequest(url, authHeader, responseData)
 }

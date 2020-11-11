@@ -1,10 +1,8 @@
 package github
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/url"
-	"os"
 
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
 )
@@ -18,19 +16,6 @@ func MakeURL(endpoint string, parameters url.Values) string {
 	)
 }
 
-// MakeAuthHeader ...
-func MakeAuthHeader() string {
-	username, token := os.Getenv("GITHUB_USERNAME"), os.Getenv("GITHUB_TOKEN")
-	if username == "" || token == "" {
-		return ""
-	}
-
-	credentials := username + ":" + token
-	credentials = base64.StdEncoding.EncodeToString([]byte(credentials))
-
-	return "Basic " + credentials
-}
-
 // SendRequest ...
 func SendRequest(
 	endpoint string,
@@ -38,6 +23,7 @@ func SendRequest(
 	responseData interface{},
 ) error {
 	url := MakeURL(endpoint, parameters)
-	authHeader := MakeAuthHeader()
+	authHeader :=
+		systemutils.MakeBasicAuthHeader("GITHUB_USERNAME", "GITHUB_TOKEN")
 	return systemutils.SendRequest(url, authHeader, responseData)
 }
