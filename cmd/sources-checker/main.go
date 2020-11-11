@@ -44,7 +44,7 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "file-system":
-		source := filesystem.Source{BasePath: ".."}
+		source := filesystem.Source{BasePath: "..", Logger: logger}
 		reposStates, err := source.LoadRepos()
 		if err != nil {
 			log.Fatal(err)
