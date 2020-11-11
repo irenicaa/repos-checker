@@ -3,7 +3,6 @@ package gitlab
 import (
 	"fmt"
 	"net/url"
-	"os"
 
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
 )
@@ -17,16 +16,6 @@ func MakeURL(endpoint string, parameters url.Values) string {
 	)
 }
 
-// MakeAuthHeader ...
-func MakeAuthHeader() string {
-	token := os.Getenv("GITLAB_TOKEN")
-	if token == "" {
-		return ""
-	}
-
-	return "Bearer " + token
-}
-
 // SendRequest ...
 func SendRequest(
 	endpoint string,
@@ -34,6 +23,6 @@ func SendRequest(
 	responseData interface{},
 ) error {
 	url := MakeURL(endpoint, parameters)
-	authHeader := MakeAuthHeader()
+	authHeader := systemutils.MakeBearerAuthHeader("GITLAB_TOKEN")
 	return systemutils.SendRequest(url, authHeader, responseData)
 }

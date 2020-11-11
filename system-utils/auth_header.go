@@ -17,3 +17,13 @@ func MakeBasicAuthHeader(usernameEnv string, passwordEnv string) string {
 
 	return "Basic " + credentials
 }
+
+// MakeBearerAuthHeader ...
+func MakeBearerAuthHeader(tokenEnv string) string {
+	token := os.Getenv(tokenEnv)
+	if token == "" {
+		return ""
+	}
+
+	return "Bearer " + token
+}
