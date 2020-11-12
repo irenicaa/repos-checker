@@ -11,8 +11,8 @@ import (
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
 )
 
-// GetLastCommit ...
-func GetLastCommit(repoPath string) (models.RepoState, error) {
+// CheckCommitCount ...
+func CheckCommitCount(repoPath string) error {
 	statusOutput, err := systemutils.RunCommand(
 		"git",
 		[]string{"status"},
@@ -20,12 +20,21 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 		map[string]string{"LC_ALL": "en_US"},
 	)
 	if err != nil {
-		return models.RepoState{}, fmt.Errorf("unable to get a git status: %v", err)
+		return fmt.Errorf("unable to get a git status: %v", err)
 	}
 
 	statusOutput = bytes.ToLower(statusOutput)
 	if bytes.Index(statusOutput, []byte("no commits yet")) != -1 {
-		return models.RepoState{}, sourceutils.ErrNoCommits
+		return sourceutils.ErrNoCommits
+	}
+
+	return nil
+}
+
+// GetLastCommit ...
+func GetLastCommit(repoPath string) (models.RepoState, error) {
+	if err := CheckCommitCount(repoPath); err != nil {
+		return models.RepoState{}, err
 	}
 
 	logOutput, err := systemutils.RunCommand(
