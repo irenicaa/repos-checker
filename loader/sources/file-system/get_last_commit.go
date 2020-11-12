@@ -46,6 +46,17 @@ func GetLastCommitSHA(repoPath string) (string, error) {
 	return strings.TrimSpace(string(logOutput)), nil
 }
 
+// GetRepoName ...
+func GetRepoName(repoPath string) (string, error) {
+	absoluteRepoPath, err := filepath.Abs(repoPath)
+	if err != nil {
+		return "", fmt.Errorf("unable to get an absolute repo path: %v", err)
+	}
+
+	_, repoName := filepath.Split(absoluteRepoPath)
+	return repoName, nil
+}
+
 // GetLastCommit ...
 func GetLastCommit(repoPath string) (models.RepoState, error) {
 	if err := CheckCommitCount(repoPath); err != nil {
@@ -57,15 +68,11 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 		return models.RepoState{}, err
 	}
 
-	absoluteRepoPath, err := filepath.Abs(repoPath)
+	repoName, err := GetRepoName(repoPath)
 	if err != nil {
-		return models.RepoState{}, fmt.Errorf(
-			"unable to get an absolute repo path: %v",
-			err,
-		)
+		return models.RepoState{}, err
 	}
 
-	_, repo := filepath.Split(absoluteRepoPath)
-	repoState := models.RepoState{Name: repo, LastCommit: lastCommitSHA}
+	repoState := models.RepoState{Name: repoName, LastCommit: lastCommitSHA}
 	return repoState, nil
 }
