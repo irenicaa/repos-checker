@@ -31,12 +31,8 @@ func CheckCommitCount(repoPath string) error {
 	return nil
 }
 
-// GetLastCommit ...
-func GetLastCommit(repoPath string) (models.RepoState, error) {
-	if err := CheckCommitCount(repoPath); err != nil {
-		return models.RepoState{}, err
-	}
-
+// GetLastCommitSHA ...
+func GetLastCommitSHA(repoPath string) (string, error) {
 	logOutput, err := systemutils.RunCommand(
 		"git",
 		[]string{"log", "--format=%H", "HEAD~.."},
@@ -44,7 +40,21 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 		nil,
 	)
 	if err != nil {
-		return models.RepoState{}, fmt.Errorf("unable to get a git log: %v", err)
+		return "", fmt.Errorf("unable to get a git log: %v", err)
+	}
+
+	return strings.TrimSpace(string(logOutput)), nil
+}
+
+// GetLastCommit ...
+func GetLastCommit(repoPath string) (models.RepoState, error) {
+	if err := CheckCommitCount(repoPath); err != nil {
+		return models.RepoState{}, err
+	}
+
+	lastCommitSHA, err := GetLastCommitSHA(repoPath)
+	if err != nil {
+		return models.RepoState{}, err
 	}
 
 	absoluteRepoPath, err := filepath.Abs(repoPath)
@@ -56,10 +66,6 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 	}
 
 	_, repo := filepath.Split(absoluteRepoPath)
-	repoState := models.RepoState{
-		Name:       repo,
-		LastCommit: strings.TrimSpace(string(logOutput)),
-	}
-
+	repoState := models.RepoState{Name: repo, LastCommit: lastCommitSHA}
 	return repoState, nil
 }
