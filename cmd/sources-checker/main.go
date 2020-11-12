@@ -17,10 +17,15 @@ func main() {
 	source := flag.String("source", "external", "")
 	flag.Parse()
 
+	const maxPageSize = 100
 	logger := log.New(os.Stderr, "", log.LstdFlags)
 	switch *source {
 	case "github":
-		source := github.Source{Owner: "irenicaa", Logger: logger}
+		source := github.Source{
+			Owner:       "irenicaa",
+			MaxPageSize: maxPageSize,
+			Logger:      logger,
+		}
 		reposStates, err := source.LoadRepos()
 		if err != nil {
 			log.Fatal(err)
@@ -28,7 +33,11 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "bitbucket":
-		source := bitbucket.Source{Workspace: "MartinFelis", Logger: logger}
+		source := bitbucket.Source{
+			Workspace:   "MartinFelis",
+			MaxPageSize: maxPageSize,
+			Logger:      logger,
+		}
 		reposStates, err := source.LoadRepos()
 		if err != nil {
 			log.Fatal(err)
@@ -36,7 +45,11 @@ func main() {
 
 		fmt.Printf("%s %+v\n", source.Name(), reposStates)
 	case "gitlab":
-		source := gitlab.Source{Owner: "dzaporozhets", Logger: logger}
+		source := gitlab.Source{
+			Owner:       "dzaporozhets",
+			MaxPageSize: maxPageSize,
+			Logger:      logger,
+		}
 		reposStates, err := source.LoadRepos()
 		if err != nil {
 			log.Fatal(err)

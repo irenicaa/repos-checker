@@ -8,8 +8,9 @@ import (
 
 // Source ...
 type Source struct {
-	Owner  string
-	Logger loader.Logger
+	Owner       string
+	MaxPageSize int
+	Logger      loader.Logger
 }
 
 // Name ...
@@ -19,10 +20,9 @@ func (source Source) Name() string {
 
 // LoadRepos ...
 func (source Source) LoadRepos() ([]models.RepoState, error) {
-	const maxPageSize = 100
 	return sourceutils.LoadRepos(
 		func(page int) ([]string, error) {
-			return GetReposPage(source.Owner, maxPageSize, page)
+			return GetReposPage(source.Owner, source.MaxPageSize, page)
 		},
 		func(repo string) (models.RepoState, error) {
 			return GetLastCommit(source.Owner, repo)
