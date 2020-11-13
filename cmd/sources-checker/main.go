@@ -6,12 +6,12 @@ import (
 	"log"
 	"os"
 
+	"github.com/irenicaa/repos-checker/loader"
 	"github.com/irenicaa/repos-checker/loader/sources/bitbucket"
 	"github.com/irenicaa/repos-checker/loader/sources/external"
 	filesystem "github.com/irenicaa/repos-checker/loader/sources/file-system"
 	"github.com/irenicaa/repos-checker/loader/sources/github"
 	"github.com/irenicaa/repos-checker/loader/sources/gitlab"
-	"github.com/irenicaa/repos-checker/models"
 )
 
 func main() {
@@ -20,52 +20,42 @@ func main() {
 
 	const maxPageSize = 100
 	logger := log.New(os.Stderr, "", log.LstdFlags)
-	var sourceName string
-	var reposStates []models.RepoState
-	var err error
+	var sourceInstance loader.Source
 	switch *source {
 	case "github":
-		source := github.Source{
+		sourceInstance = github.Source{
 			Owner:       "irenicaa",
 			MaxPageSize: maxPageSize,
 			Logger:      logger,
 		}
-		sourceName = source.Name()
-		reposStates, err = source.LoadRepos()
 	case "bitbucket":
-		source := bitbucket.Source{
+		sourceInstance = bitbucket.Source{
 			Workspace:   "MartinFelis",
 			MaxPageSize: maxPageSize,
 			Logger:      logger,
 		}
-		sourceName = source.Name()
-		reposStates, err = source.LoadRepos()
 	case "gitlab":
-		source := gitlab.Source{
+		sourceInstance = gitlab.Source{
 			Owner:       "dzaporozhets",
 			MaxPageSize: maxPageSize,
 			Logger:      logger,
 		}
-		sourceName = source.Name()
-		reposStates, err = source.LoadRepos()
 	case "file-system":
-		source := filesystem.Source{BasePath: "..", Logger: logger}
-		sourceName = source.Name()
-		reposStates, err = source.LoadRepos()
+		sourceInstance = filesystem.Source{BasePath: "..", Logger: logger}
 	case "external":
-		source := external.Source{
+		sourceInstance = external.Source{
 			AdditionalName: "test",
 			Command:        "./tools/test_tool.bash",
 			Arguments:      []string{".."},
 		}
-		sourceName = source.Name()
-		reposStates, err = source.LoadRepos()
 	default:
 		log.Fatal("unknown source")
 	}
+
+	reposStates, err := sourceInstance.LoadRepos()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%s %+v\n", sourceName, reposStates)
+	fmt.Printf("%s %+v\n", sourceInstance.Name(), reposStates)
 }
