@@ -17,6 +17,7 @@ import (
 func main() {
 	source := flag.String("source", "", "")
 	owner := flag.String("owner", "", "")
+	basePath := flag.String("path", "..", "")
 	flag.Parse()
 	if *source == "" {
 		log.Fatal("source is unspecified")
@@ -57,7 +58,7 @@ func main() {
 			Logger:      logger,
 		}
 	case "file-system":
-		sourceInstance = filesystem.Source{BasePath: "..", Logger: logger}
+		sourceInstance = filesystem.Source{BasePath: *basePath, Logger: logger}
 	case "external":
 		sourceInstance = external.Source{
 			AdditionalName: "test",
