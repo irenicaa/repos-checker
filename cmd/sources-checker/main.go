@@ -15,8 +15,11 @@ import (
 )
 
 func main() {
-	source := flag.String("source", "external", "")
+	source := flag.String("source", "", "")
 	flag.Parse()
+	if *source == "" {
+		log.Fatal("source is unspecified")
+	}
 
 	const maxPageSize = 100
 	logger := log.New(os.Stderr, "", log.LstdFlags)
