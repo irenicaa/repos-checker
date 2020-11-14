@@ -16,6 +16,7 @@ import (
 
 func main() {
 	source := flag.String("source", "", "")
+	owner := flag.String("owner", "", "")
 	flag.Parse()
 	if *source == "" {
 		log.Fatal("source is unspecified")
@@ -26,20 +27,32 @@ func main() {
 	var sourceInstance loader.Source
 	switch *source {
 	case "github":
+		if *owner == "" {
+			*owner = "irenicaa"
+		}
+
 		sourceInstance = github.Source{
-			Owner:       "irenicaa",
+			Owner:       *owner,
 			MaxPageSize: maxPageSize,
 			Logger:      logger,
 		}
 	case "bitbucket":
+		if *owner == "" {
+			*owner = "MartinFelis"
+		}
+
 		sourceInstance = bitbucket.Source{
-			Workspace:   "MartinFelis",
+			Workspace:   *owner,
 			MaxPageSize: maxPageSize,
 			Logger:      logger,
 		}
 	case "gitlab":
+		if *owner == "" {
+			*owner = "dzaporozhets"
+		}
+
 		sourceInstance = gitlab.Source{
-			Owner:       "dzaporozhets",
+			Owner:       *owner,
 			MaxPageSize: maxPageSize,
 			Logger:      logger,
 		}
