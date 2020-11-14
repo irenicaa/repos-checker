@@ -11,6 +11,17 @@ import (
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
 )
 
+// GetRepoName ...
+func GetRepoName(repoPath string) (string, error) {
+	absoluteRepoPath, err := filepath.Abs(repoPath)
+	if err != nil {
+		return "", fmt.Errorf("unable to get an absolute repo path: %v", err)
+	}
+
+	_, repoName := filepath.Split(absoluteRepoPath)
+	return repoName, nil
+}
+
 // CheckCommitCount ...
 func CheckCommitCount(repoPath string) error {
 	statusOutput, err := systemutils.RunCommand(
@@ -46,29 +57,18 @@ func GetLastCommitSHA(repoPath string) (string, error) {
 	return strings.TrimSpace(string(logOutput)), nil
 }
 
-// GetRepoName ...
-func GetRepoName(repoPath string) (string, error) {
-	absoluteRepoPath, err := filepath.Abs(repoPath)
-	if err != nil {
-		return "", fmt.Errorf("unable to get an absolute repo path: %v", err)
-	}
-
-	_, repoName := filepath.Split(absoluteRepoPath)
-	return repoName, nil
-}
-
 // GetLastCommit ...
 func GetLastCommit(repoPath string) (models.RepoState, error) {
-	if err := CheckCommitCount(repoPath); err != nil {
+	repoName, err := GetRepoName(repoPath)
+	if err != nil {
+		return models.RepoState{}, err
+	}
+
+	if err = CheckCommitCount(repoPath); err != nil {
 		return models.RepoState{}, err
 	}
 
 	lastCommitSHA, err := GetLastCommitSHA(repoPath)
-	if err != nil {
-		return models.RepoState{}, err
-	}
-
-	repoName, err := GetRepoName(repoPath)
 	if err != nil {
 		return models.RepoState{}, err
 	}
