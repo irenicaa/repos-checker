@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/irenicaa/repos-checker/loader"
 	"github.com/irenicaa/repos-checker/loader/sources/bitbucket"
@@ -18,6 +19,7 @@ func main() {
 	source := flag.String("source", "", "")
 	owner := flag.String("owner", "", "")
 	basePath := flag.String("path", "..", "")
+	command := flag.String("command", "./tools/test_tool.bash ..", "")
 	flag.Parse()
 	if *source == "" {
 		log.Fatal("source is unspecified")
@@ -60,10 +62,15 @@ func main() {
 	case "file-system":
 		sourceInstance = filesystem.Source{BasePath: *basePath, Logger: logger}
 	case "external":
+		commandParts := strings.Fields(*command)
+		if len(commandParts) == 0 {
+			log.Fatal("command shouldn't be empty")
+		}
+
 		sourceInstance = external.Source{
 			AdditionalName: "test",
-			Command:        "./tools/test_tool.bash",
-			Arguments:      []string{".."},
+			Command:        commandParts[0],
+			Arguments:      commandParts[1:],
 		}
 	default:
 		log.Fatal("unknown source")
