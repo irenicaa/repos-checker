@@ -21,17 +21,18 @@ func LoadSources(sources []Source, logger Logger) []models.SourceState {
 		go func(index int, source Source) {
 			defer waiter.Done()
 
-			name := source.Name()
-			repos, err := source.LoadRepos()
+			sourceState, err := LoadSource(source)
 			if err != nil {
-				logger.Printf("unable to load repos from the %s source: %s", name, err)
+				logger.Printf(
+					"unable to load repos from the %s source: %s",
+					sourceState.Name,
+					err,
+				)
+
 				return
 			}
 
-			sourceStates[index] = models.SourceState{
-				Name:  name,
-				Repos: repos,
-			}
+			sourceStates[index] = sourceState
 		}(index, source)
 	}
 
@@ -45,4 +46,16 @@ func LoadSources(sources []Source, logger Logger) []models.SourceState {
 	}
 
 	return successfulSourceState
+}
+
+// LoadSource ...
+func LoadSource(source Source) (models.SourceState, error) {
+	name := source.Name()
+	repos, err := source.LoadRepos()
+	if err != nil {
+		return models.SourceState{Name: name}, err
+	}
+
+	sourceState := models.SourceState{Name: name, Repos: repos}
+	return sourceState, nil
 }

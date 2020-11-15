@@ -76,10 +76,10 @@ func main() {
 		log.Fatal("unknown source")
 	}
 
-	reposStates, err := sourceInstance.LoadRepos()
+	sourceState, err := loader.LoadSource(sourceInstance)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%s %+v\n", sourceInstance.Name(), reposStates)
+	fmt.Printf("%+v\n", sourceState)
 }

@@ -177,3 +177,68 @@ func TestLoadSources(t *testing.T) {
 		})
 	}
 }
+
+func TestLoadSource(t *testing.T) {
+	type args struct {
+		source Source
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		want    models.SourceState
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "success",
+			args: args{
+				source: func() Source {
+					repos := []models.RepoState{
+						{Name: "one", LastCommit: "100"},
+						{Name: "two", LastCommit: "200"},
+					}
+
+					source := &MockSource{}
+					source.InnerMock.On("Name").Return("source-one").Times(1)
+					source.InnerMock.On("LoadRepos").Return(repos, nil).Times(1)
+
+					return source
+				}(),
+			},
+			want: models.SourceState{
+				Name: "source-one",
+				Repos: []models.RepoState{
+					{Name: "one", LastCommit: "100"},
+					{Name: "two", LastCommit: "200"},
+				},
+			},
+			wantErr: assert.NoError,
+		},
+		{
+			name: "error",
+			args: args{
+				source: func() Source {
+					source := &MockSource{}
+					source.InnerMock.On("Name").Return("source-one").Times(1)
+					source.InnerMock.
+						On("LoadRepos").
+						Return(([]models.RepoState)(nil), iotest.ErrTimeout).
+						Times(1)
+
+					return source
+				}(),
+			},
+			want:    models.SourceState{Name: "source-one"},
+			wantErr: assert.Error,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := LoadSource(tt.args.source)
+
+			tt.args.source.(*MockSource).InnerMock.AssertExpectations(t)
+			assert.Equal(t, tt.want, got)
+			tt.wantErr(t, err)
+		})
+	}
+}
