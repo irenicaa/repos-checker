@@ -40,7 +40,7 @@ func CompareRepos(
 ) SourceDiff {
 	sourceDiff := SourceDiff{NameOfLeft: left.Name, NameOfRight: right.Name}
 
-	rightRepos := makeRepoIndex(right.Repos)
+	rightRepos := models.NewRepoStateIndex(right.Repos)
 	for _, itemLeft := range left.Repos {
 		foundItem, found := rightRepos[itemLeft.Name]
 		if !found {
@@ -59,7 +59,7 @@ func CompareRepos(
 		}
 	}
 
-	leftRepos := makeRepoIndex(left.Repos)
+	leftRepos := models.NewRepoStateIndex(left.Repos)
 	for _, itemRight := range right.Repos {
 		if _, found := leftRepos[itemRight.Name]; !found {
 			sourceDiff.MissedInLeft = append(sourceDiff.MissedInLeft, itemRight)
@@ -67,13 +67,4 @@ func CompareRepos(
 	}
 
 	return sourceDiff
-}
-
-func makeRepoIndex(repos []models.RepoState) map[string]models.RepoState {
-	repoIndex := map[string]models.RepoState{}
-	for _, item := range repos {
-		repoIndex[item.Name] = item
-	}
-
-	return repoIndex
 }
