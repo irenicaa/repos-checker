@@ -18,6 +18,7 @@ import (
 func main() {
 	source := flag.String("source", "", "")
 	owner := flag.String("owner", "", "")
+	pageSize := flag.Int("pageSize", 100, "")
 	basePath := flag.String("path", "..", "")
 	command := flag.String("command", "./tools/test_tool.bash ..", "")
 	flag.Parse()
@@ -25,9 +26,8 @@ func main() {
 		log.Fatal("source is unspecified")
 	}
 
-	const maxPageSize = 100
-	logger := log.New(os.Stderr, "", log.LstdFlags)
 	var sourceInstance loader.Source
+	logger := log.New(os.Stderr, "", log.LstdFlags)
 	switch *source {
 	case "github":
 		if *owner == "" {
@@ -36,7 +36,7 @@ func main() {
 
 		sourceInstance = github.Source{
 			Owner:    *owner,
-			PageSize: maxPageSize,
+			PageSize: *pageSize,
 			Logger:   logger,
 		}
 	case "bitbucket":
@@ -46,7 +46,7 @@ func main() {
 
 		sourceInstance = bitbucket.Source{
 			Workspace: *owner,
-			PageSize:  maxPageSize,
+			PageSize:  *pageSize,
 			Logger:    logger,
 		}
 	case "gitlab":
@@ -56,7 +56,7 @@ func main() {
 
 		sourceInstance = gitlab.Source{
 			Owner:    *owner,
-			PageSize: maxPageSize,
+			PageSize: *pageSize,
 			Logger:   logger,
 		}
 	case "file-system":
