@@ -35,9 +35,9 @@ func main() {
 		}
 
 		sourceInstance = github.Source{
-			Owner:       *owner,
-			MaxPageSize: maxPageSize,
-			Logger:      logger,
+			Owner:    *owner,
+			PageSize: maxPageSize,
+			Logger:   logger,
 		}
 	case "bitbucket":
 		if *owner == "" {
@@ -45,9 +45,9 @@ func main() {
 		}
 
 		sourceInstance = bitbucket.Source{
-			Workspace:   *owner,
-			MaxPageSize: maxPageSize,
-			Logger:      logger,
+			Workspace: *owner,
+			PageSize:  maxPageSize,
+			Logger:    logger,
 		}
 	case "gitlab":
 		if *owner == "" {
@@ -55,9 +55,9 @@ func main() {
 		}
 
 		sourceInstance = gitlab.Source{
-			Owner:       *owner,
-			MaxPageSize: maxPageSize,
-			Logger:      logger,
+			Owner:    *owner,
+			PageSize: maxPageSize,
+			Logger:   logger,
 		}
 	case "file-system":
 		sourceInstance = filesystem.Source{BasePath: *basePath, Logger: logger}
