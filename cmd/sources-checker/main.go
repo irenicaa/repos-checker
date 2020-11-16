@@ -79,12 +79,12 @@ func main() {
 
 	sourceState, err := loader.LoadSource(sourceInstance)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("unable to load repos: %s", err)
 	}
 
 	sourceStateBytes, err := json.Marshal(sourceState)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("unable to marshal the source state: %s", err)
 	}
 
 	fmt.Println(string(sourceStateBytes))

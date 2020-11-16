@@ -28,7 +28,7 @@ func SendRequest(
 	}
 	if response.StatusCode != http.StatusOK {
 		return fmt.Errorf(
-			"unable to request was failed with the status: %d",
+			"request was failed with the status: %d",
 			response.StatusCode,
 		)
 	}
