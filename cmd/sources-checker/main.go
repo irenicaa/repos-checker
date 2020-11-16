@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -81,5 +82,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", sourceState)
+	sourceStateBytes, err := json.Marshal(sourceState)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(sourceStateBytes))
 }
