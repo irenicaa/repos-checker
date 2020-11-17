@@ -7,7 +7,7 @@ find $basePath -type d -name ".git" \
     pushd $repoPath > /dev/null
 
     declare name=$(basename $repoPath)
-    declare lastCommit=$(git log --format=%H HEAD~..)
+    declare lastCommit=$(git rev-parse HEAD)
     printf '{"name":"%s","lastCommit":"%s"}\n' $name $lastCommit
 
     popd > /dev/null

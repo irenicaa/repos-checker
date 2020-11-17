@@ -46,12 +46,12 @@ func CheckCommitCount(repoPath string) error {
 func GetLastCommitSHA(repoPath string) (string, error) {
 	logOutput, err := systemutils.RunCommand(
 		"git",
-		[]string{"log", "--format=%H", "HEAD~.."},
+		[]string{"rev-parse", "HEAD"},
 		repoPath,
 		nil,
 	)
 	if err != nil {
-		return "", fmt.Errorf("unable to get a git log: %v", err)
+		return "", fmt.Errorf("unable to parse a HEAD git reference: %v", err)
 	}
 
 	return strings.TrimSpace(string(logOutput)), nil
