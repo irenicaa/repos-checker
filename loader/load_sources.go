@@ -38,14 +38,7 @@ func LoadSources(sources []Source, logger Logger) []models.SourceState {
 
 	waiter.Wait()
 
-	successfulSourceState := []models.SourceState{}
-	for _, source := range sourceStates {
-		if source.Name != "" {
-			successfulSourceState = append(successfulSourceState, source)
-		}
-	}
-
-	return successfulSourceState
+	return models.FilterNonemptySources(sourceStates)
 }
 
 // LoadSource ...
