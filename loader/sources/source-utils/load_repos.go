@@ -33,7 +33,11 @@ func LoadRepos(
 		case ErrNoCommits:
 			logger.Printf("%s repo has no commits", repo)
 		default:
-			return nil, fmt.Errorf("unable to get the last commit: %v", err)
+			return nil, fmt.Errorf(
+				"unable to get the last commit of the %s repo: %v",
+				repo,
+				err,
+			)
 		}
 
 		reposStates = append(reposStates, repoState)

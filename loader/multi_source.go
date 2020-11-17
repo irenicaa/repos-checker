@@ -1,6 +1,7 @@
 package loader
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/irenicaa/repos-checker/models"
@@ -26,7 +27,7 @@ func (sources MultiSource) LoadRepos() ([]models.RepoState, error) {
 	for _, source := range sources {
 		repo, err := source.LoadRepos()
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("for the %s source: %v", source.Name(), err)
 		}
 
 		repos = append(repos, repo...)

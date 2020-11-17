@@ -31,10 +31,7 @@ func (source Source) LoadRepos() ([]models.RepoState, error) {
 		source.EnvironmentVariables,
 	)
 	if err != nil {
-		return nil, fmt.Errorf(
-			"an error occurred while running the command: %v",
-			err,
-		)
+		return nil, fmt.Errorf("error occurred while running the command: %v", err)
 	}
 
 	var reposStates []models.RepoState

@@ -104,7 +104,7 @@ func TestLoadSources(t *testing.T) {
 
 					logger := &MockLogger{}
 					logger.InnerMock.
-						On("Printf", "unable to load repos from the %s source: %s", arguments).
+						On("Printf", "unable to load repos from the %s source: %v", arguments).
 						Return().
 						Times(1)
 
@@ -151,11 +151,11 @@ func TestLoadSources(t *testing.T) {
 
 					logger := &MockLogger{}
 					logger.InnerMock.
-						On("Printf", "unable to load repos from the %s source: %s", argumentsOne).
+						On("Printf", "unable to load repos from the %s source: %v", argumentsOne).
 						Return().
 						Times(1)
 					logger.InnerMock.
-						On("Printf", "unable to load repos from the %s source: %s", argumentsTwo).
+						On("Printf", "unable to load repos from the %s source: %v", argumentsTwo).
 						Return().
 						Times(1)
 

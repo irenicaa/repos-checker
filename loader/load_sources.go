@@ -24,7 +24,7 @@ func LoadSources(sources []Source, logger Logger) []models.SourceState {
 			sourceState, err := LoadSource(source)
 			if err != nil {
 				logger.Printf(
-					"unable to load repos from the %s source: %s",
+					"unable to load repos from the %s source: %v",
 					sourceState.Name,
 					err,
 				)

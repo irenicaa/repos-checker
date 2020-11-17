@@ -102,6 +102,7 @@ func TestMultiSource_LoadRepos(t *testing.T) {
 			sources: MultiSource{
 				func() Source {
 					source := &MockSource{}
+					source.InnerMock.On("Name").Return("source-one").Times(1)
 					source.InnerMock.
 						On("LoadRepos").
 						Return(([]models.RepoState)(nil), iotest.ErrTimeout).
