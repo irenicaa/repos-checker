@@ -1,6 +1,8 @@
 package reposchecker
 
 import (
+	"reflect"
+
 	"github.com/irenicaa/repos-checker/comparer"
 	"github.com/irenicaa/repos-checker/loader"
 	"github.com/irenicaa/repos-checker/models"
@@ -21,6 +23,10 @@ func CheckSources(
 		} else {
 			rest = append(rest, sourseState)
 		}
+	}
+	if reflect.DeepEqual(reference, models.SourceState{}) {
+		logger.Printf("no repos for the reference source")
+		return []comparer.SourceDiff{}
 	}
 
 	return comparer.CompareSources(rest, reference)
