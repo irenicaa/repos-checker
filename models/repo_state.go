@@ -18,3 +18,20 @@ func NewRepoStateIndex(repos []RepoState) RepoStateIndex {
 
 	return repoIndex
 }
+
+// FindRepoStateDuplicates ...
+func FindRepoStateDuplicates(reposStates []RepoState) []string {
+	reposStatesCounters := map[string]int{}
+	for _, repoState := range reposStates {
+		reposStatesCounters[repoState.Name]++
+	}
+
+	var duplicates []string
+	for name, counter := range reposStatesCounters {
+		if counter > 1 {
+			duplicates = append(duplicates, name)
+		}
+	}
+
+	return duplicates
+}
