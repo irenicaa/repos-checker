@@ -8,12 +8,17 @@ type SourceState struct {
 	Repos []RepoState
 }
 
+// IsZero ...
+func (sourceState SourceState) IsZero() bool {
+	return reflect.DeepEqual(sourceState, SourceState{})
+}
+
 // FilterNonemptySources ...
 func FilterNonemptySources(sourceStates []SourceState) []SourceState {
 	filteredSourceState := []SourceState{}
-	for _, source := range sourceStates {
-		if !reflect.DeepEqual(source, SourceState{}) {
-			filteredSourceState = append(filteredSourceState, source)
+	for _, sourceState := range sourceStates {
+		if !sourceState.IsZero() {
+			filteredSourceState = append(filteredSourceState, sourceState)
 		}
 	}
 
