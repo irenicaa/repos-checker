@@ -16,6 +16,7 @@ type GetLastCommit func(repo string) (models.RepoState, error)
 
 // LoadRepos ...
 func LoadRepos(
+	sourceName string,
 	getOnePage GetOnePage,
 	getLastCommit GetLastCommit,
 	logger loader.Logger,
@@ -31,7 +32,7 @@ func LoadRepos(
 		switch err {
 		case nil:
 		case ErrNoCommits:
-			logger.Printf("%s repo has no commits", repo)
+			logger.Printf("%s repo from the %s source has no commits", repo, sourceName)
 		default:
 			return nil, fmt.Errorf(
 				"unable to get the last commit of the %s repo: %v",

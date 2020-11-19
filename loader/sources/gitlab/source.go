@@ -21,6 +21,7 @@ func (source Source) Name() string {
 // LoadRepos ...
 func (source Source) LoadRepos() ([]models.RepoState, error) {
 	return sourceutils.LoadRepos(
+		source.Name(),
 		func(page int) ([]string, error) {
 			return GetReposPage(source.Owner, source.PageSize, page)
 		},

@@ -25,7 +25,7 @@ func CheckSources(
 		}
 	}
 	if reflect.DeepEqual(reference, models.SourceState{}) {
-		logger.Printf("no repos for the reference source")
+		logger.Printf("unable to load repos from the reference source")
 		return []comparer.SourceDiff{}
 	}
 
