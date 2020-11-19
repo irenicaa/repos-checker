@@ -15,11 +15,20 @@ func CheckSources(
 	var reference models.SourceState
 	var rest []models.SourceState
 	sourceStates := loader.LoadSources(sources, logger)
-	for _, sourseState := range sourceStates {
-		if sourseState.Name == referenceName {
-			reference = sourseState
+	for _, sourceState := range sourceStates {
+		duplicates := models.FindRepoStateDuplicates(sourceState.Repos)
+		if len(duplicates) != 0 {
+			logger.Printf(
+				"repos from the %s source has duplicates: %v",
+				sourceState.Name,
+				duplicates,
+			)
+		}
+
+		if sourceState.Name == referenceName {
+			reference = sourceState
 		} else {
-			rest = append(rest, sourseState)
+			rest = append(rest, sourceState)
 		}
 	}
 	if reference.IsZero() {
