@@ -1,12 +1,14 @@
 package reposchecker
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/irenicaa/repos-checker/comparer"
 	"github.com/irenicaa/repos-checker/loader"
 	"github.com/irenicaa/repos-checker/models"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestCheckSources(t *testing.T) {
@@ -200,11 +202,21 @@ func TestCheckSources(t *testing.T) {
 				},
 				referenceName: "source-three",
 				logger: func() loader.Logger {
-					arguments := []interface{}{"source-two", []string{"three", "four"}}
+					argumentsMatcher := mock.MatchedBy(func(arguments []interface{}) bool {
+						argumentsOne := []interface{}{"source-two", []string{"three", "four"}}
+						argumentsTwo := []interface{}{"source-two", []string{"four", "three"}}
+
+						return reflect.DeepEqual(arguments, argumentsOne) ||
+							reflect.DeepEqual(arguments, argumentsTwo)
+					})
 
 					logger := &MockLogger{}
 					logger.InnerMock.
-						On("Printf", "repos from the %s source has duplicates: %v", arguments).
+						On(
+							"Printf",
+							"repos from the %s source has duplicates: %v",
+							argumentsMatcher,
+						).
 						Return().
 						Times(1)
 

@@ -108,7 +108,7 @@ func TestFindRepoStateDuplicates(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := FindRepoStateDuplicates(tt.args.reposStates)
 
-			assert.Equal(t, tt.want, got)
+			assert.ElementsMatch(t, tt.want, got)
 		})
 	}
 }
