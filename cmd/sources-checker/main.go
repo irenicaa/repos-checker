@@ -14,6 +14,7 @@ import (
 	filesystem "github.com/irenicaa/repos-checker/loader/sources/file-system"
 	"github.com/irenicaa/repos-checker/loader/sources/github"
 	"github.com/irenicaa/repos-checker/loader/sources/gitlab"
+	"github.com/irenicaa/repos-checker/models"
 )
 
 func main() {
@@ -80,6 +81,11 @@ func main() {
 	sourceState, err := loader.LoadSource(sourceInstance)
 	if err != nil {
 		log.Fatalf("unable to load repos: %s", err)
+	}
+
+	duplicates := models.FindRepoStateDuplicates(sourceState.Repos)
+	if len(duplicates) != 0 {
+		log.Printf("repos has duplicates: %v", duplicates)
 	}
 
 	sourceStateBytes, err := json.Marshal(sourceState)
