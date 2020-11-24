@@ -23,7 +23,7 @@ type SourceConfig struct {
 }
 
 // LoadConfig ...
-func LoadConfig(reader io.Reader) ([]loader.Source, error) {
+func LoadConfig(reader io.Reader, logger loader.Logger) ([]loader.Source, error) {
 	configBytes, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, fmt.Errorf("unable to read a config: %v", err)
@@ -39,13 +39,13 @@ func LoadConfig(reader io.Reader) ([]loader.Source, error) {
 		var source loader.Source
 		switch sourceConfig.Name {
 		case "github":
-			source = github.Source{}
+			source = github.Source{Logger: logger}
 		case "bitbucket":
-			source = bitbucket.Source{}
+			source = bitbucket.Source{Logger: logger}
 		case "gitlab":
-			source = gitlab.Source{}
+			source = gitlab.Source{Logger: logger}
 		case "file-system":
-			source = filesystem.Source{}
+			source = filesystem.Source{Logger: logger}
 		case "external":
 			source = external.Source{}
 		default:
