@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -19,23 +20,35 @@ type Config []SourceConfig
 
 // SourceConfig ...
 type SourceConfig struct {
-	Name string
+	Name        string
+	IsReference bool
 }
 
 // LoadConfig ...
-func LoadConfig(reader io.Reader, logger loader.Logger) ([]loader.Source, error) {
+func LoadConfig(reader io.Reader, logger loader.Logger) (
+	sources []loader.Source,
+	referenceName string,
+	err error,
+) {
 	configBytes, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return nil, fmt.Errorf("unable to read a config: %v", err)
+		return nil, "", fmt.Errorf("unable to read a config: %v", err)
 	}
 
 	var config Config
 	if err := json.Unmarshal(configBytes, &config); err != nil {
-		return nil, fmt.Errorf("unable to unmarshal the config: %v", err)
+		return nil, "", fmt.Errorf("unable to unmarshal the config: %v", err)
 	}
 
-	var sources []loader.Source
 	for _, sourceConfig := range config {
+		if sourceConfig.IsReference {
+			if referenceName != "" {
+				return nil, "", errors.New("more than one source is marked as a reference")
+			}
+
+			referenceName = sourceConfig.Name
+		}
+
 		var source loader.Source
 		switch sourceConfig.Name {
 		case "github":
@@ -49,11 +62,11 @@ func LoadConfig(reader io.Reader, logger loader.Logger) ([]loader.Source, error)
 		case "external":
 			source = external.Source{}
 		default:
-			return nil, fmt.Errorf("unknown source %s", sourceConfig.Name)
+			return nil, "", fmt.Errorf("unknown source %s", sourceConfig.Name)
 		}
 
 		sources = append(sources, source)
 	}
 
-	return sources, nil
+	return sources, referenceName, nil
 }
