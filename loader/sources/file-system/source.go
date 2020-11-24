@@ -9,7 +9,7 @@ import (
 // Source ...
 type Source struct {
 	BasePath string
-	Logger   loader.Logger
+	Logger   loader.Logger `json:"-"`
 }
 
 // Name ...

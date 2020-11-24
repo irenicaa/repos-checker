@@ -10,7 +10,7 @@ import (
 type Source struct {
 	Workspace string
 	PageSize  int
-	Logger    loader.Logger
+	Logger    loader.Logger `json:"-"`
 }
 
 // Name ...
