@@ -22,6 +22,7 @@ type Config []SourceConfig
 type SourceConfig struct {
 	Name        string
 	IsReference bool
+	Options     json.RawMessage
 }
 
 // LoadConfig ...
@@ -63,6 +64,10 @@ func LoadConfig(reader io.Reader, logger loader.Logger) (
 			source = external.Source{}
 		default:
 			return nil, "", fmt.Errorf("unknown source %s", sourceConfig.Name)
+		}
+
+		if err := json.Unmarshal(sourceConfig.Options, &source); err != nil {
+			return nil, "", fmt.Errorf("unable to unmarshal source options: %v", err)
 		}
 
 		sources = append(sources, source)
