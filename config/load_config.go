@@ -23,6 +23,7 @@ type SourceConfig struct {
 	Name        string
 	IsReference bool
 	Options     json.RawMessage
+	SubSources  []SourceConfig
 }
 
 // LoadConfig ...
@@ -82,6 +83,22 @@ func LoadSource(sourceConfig SourceConfig, logger loader.Logger) (
 		source = filesystem.Source{Logger: logger}
 	case "external":
 		source = external.Source{}
+	case "multi-source":
+		var subSources []loader.Source
+		for _, subSourceConfig := range sourceConfig.SubSources {
+			subSource, err := LoadSource(subSourceConfig, logger)
+			if err != nil {
+				return nil, fmt.Errorf(
+					"unable to load the %s sub-source: %v",
+					sourceConfig.Name,
+					err,
+				)
+			}
+
+			subSources = append(subSources, subSource)
+		}
+
+		source = loader.MultiSource(subSources)
 	default:
 		return nil, fmt.Errorf("unknown source %s", sourceConfig.Name)
 	}
