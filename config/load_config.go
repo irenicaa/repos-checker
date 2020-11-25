@@ -74,15 +74,15 @@ func LoadSource(sourceConfig SourceConfig, logger loader.Logger) (
 	var source loader.Source
 	switch sourceConfig.Name {
 	case "github":
-		source = github.Source{Logger: logger}
+		source = &github.Source{Logger: logger}
 	case "bitbucket":
-		source = bitbucket.Source{Logger: logger}
+		source = &bitbucket.Source{Logger: logger}
 	case "gitlab":
-		source = gitlab.Source{Logger: logger}
+		source = &gitlab.Source{Logger: logger}
 	case "file-system":
-		source = filesystem.Source{Logger: logger}
+		source = &filesystem.Source{Logger: logger}
 	case "external":
-		source = external.Source{}
+		source = &external.Source{}
 	case "multi-source":
 		var subSources []loader.Source
 		for _, subSourceConfig := range sourceConfig.SubSources {
@@ -103,7 +103,7 @@ func LoadSource(sourceConfig SourceConfig, logger loader.Logger) (
 		return nil, fmt.Errorf("unknown source %s", sourceConfig.Name)
 	}
 
-	if err := json.Unmarshal(sourceConfig.Options, &source); err != nil {
+	if err := json.Unmarshal(sourceConfig.Options, source); err != nil {
 		return nil, fmt.Errorf("unable to unmarshal source options: %v", err)
 	}
 
