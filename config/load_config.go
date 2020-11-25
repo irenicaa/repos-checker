@@ -50,28 +50,45 @@ func LoadConfig(reader io.Reader, logger loader.Logger) (
 			referenceName = sourceConfig.Name
 		}
 
-		var source loader.Source
-		switch sourceConfig.Name {
-		case "github":
-			source = github.Source{Logger: logger}
-		case "bitbucket":
-			source = bitbucket.Source{Logger: logger}
-		case "gitlab":
-			source = gitlab.Source{Logger: logger}
-		case "file-system":
-			source = filesystem.Source{Logger: logger}
-		case "external":
-			source = external.Source{}
-		default:
-			return nil, "", fmt.Errorf("unknown source %s", sourceConfig.Name)
-		}
-
-		if err := json.Unmarshal(sourceConfig.Options, &source); err != nil {
-			return nil, "", fmt.Errorf("unable to unmarshal source options: %v", err)
+		source, err := LoadSource(sourceConfig, logger)
+		if err != nil {
+			return nil, "", fmt.Errorf(
+				"unable to load the %s source: %v",
+				sourceConfig.Name,
+				err,
+			)
 		}
 
 		sources = append(sources, source)
 	}
 
 	return sources, referenceName, nil
+}
+
+// LoadSource ...
+func LoadSource(sourceConfig SourceConfig, logger loader.Logger) (
+	loader.Source,
+	error,
+) {
+	var source loader.Source
+	switch sourceConfig.Name {
+	case "github":
+		source = github.Source{Logger: logger}
+	case "bitbucket":
+		source = bitbucket.Source{Logger: logger}
+	case "gitlab":
+		source = gitlab.Source{Logger: logger}
+	case "file-system":
+		source = filesystem.Source{Logger: logger}
+	case "external":
+		source = external.Source{}
+	default:
+		return nil, fmt.Errorf("unknown source %s", sourceConfig.Name)
+	}
+
+	if err := json.Unmarshal(sourceConfig.Options, &source); err != nil {
+		return nil, fmt.Errorf("unable to unmarshal source options: %v", err)
+	}
+
+	return source, nil
 }
