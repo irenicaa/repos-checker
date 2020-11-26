@@ -103,8 +103,10 @@ func LoadSource(sourceConfig SourceConfig, logger loader.Logger) (
 		return nil, fmt.Errorf("unknown source %s", sourceConfig.Name)
 	}
 
-	if err := json.Unmarshal(sourceConfig.Options, source); err != nil {
-		return nil, fmt.Errorf("unable to unmarshal source options: %v", err)
+	if sourceConfig.Options != nil {
+		if err := json.Unmarshal(sourceConfig.Options, source); err != nil {
+			return nil, fmt.Errorf("unable to unmarshal source options: %v", err)
+		}
 	}
 
 	return source, nil
