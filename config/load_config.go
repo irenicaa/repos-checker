@@ -90,7 +90,7 @@ func LoadSource(sourceConfig SourceConfig, logger loader.Logger) (
 			if err != nil {
 				return nil, fmt.Errorf(
 					"unable to load the %s sub-source: %v",
-					sourceConfig.Name,
+					subSourceConfig.Name,
 					err,
 				)
 			}
