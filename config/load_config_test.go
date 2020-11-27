@@ -2,7 +2,10 @@ package config
 
 import (
 	"encoding/json"
+	"io"
+	"strings"
 	"testing"
+	"testing/iotest"
 
 	"github.com/irenicaa/repos-checker/loader"
 	"github.com/irenicaa/repos-checker/loader/sources/bitbucket"
@@ -12,6 +15,202 @@ import (
 	"github.com/irenicaa/repos-checker/loader/sources/gitlab"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestLoadConfig(t *testing.T) {
+	type args struct {
+		reader io.Reader
+		logger loader.Logger
+	}
+
+	tests := []struct {
+		name              string
+		args              args
+		wantSources       []loader.Source
+		wantReferenceName string
+		wantErr           assert.ErrorAssertionFunc
+	}{
+		{
+			name: "success (empty)",
+			args: args{
+				reader: strings.NewReader("[]"),
+				logger: &MockLogger{},
+			},
+			wantSources:       nil,
+			wantReferenceName: "",
+			wantErr:           assert.NoError,
+		},
+		{
+			name: "success (nonempty, without a specified reference)",
+			args: args{
+				reader: strings.NewReader(`[
+					{
+						"name": "github",
+						"options": {
+							"owner": "one",
+							"pageSize": 23
+						}
+					},
+					{
+						"name": "bitbucket",
+						"options": {
+							"workspace": "two",
+							"pageSize": 42
+						}
+					}
+				]`),
+				logger: &MockLogger{},
+			},
+			wantSources: []loader.Source{
+				&github.Source{
+					Owner:    "one",
+					PageSize: 23,
+					Logger:   &MockLogger{},
+				},
+				&bitbucket.Source{
+					Workspace: "two",
+					PageSize:  42,
+					Logger:    &MockLogger{},
+				},
+			},
+			wantReferenceName: "",
+			wantErr:           assert.NoError,
+		},
+		{
+			name: "success (nonempty, with a specified reference)",
+			args: args{
+				reader: strings.NewReader(`[
+					{
+						"name": "github",
+						"options": {
+							"owner": "one",
+							"pageSize": 23
+						}
+					},
+					{
+						"name": "bitbucket",
+						"isReference": true,
+						"options": {
+							"workspace": "two",
+							"pageSize": 42
+						}
+					}
+				]`),
+				logger: &MockLogger{},
+			},
+			wantSources: []loader.Source{
+				&github.Source{
+					Owner:    "one",
+					PageSize: 23,
+					Logger:   &MockLogger{},
+				},
+				&bitbucket.Source{
+					Workspace: "two",
+					PageSize:  42,
+					Logger:    &MockLogger{},
+				},
+			},
+			wantReferenceName: "bitbucket",
+			wantErr:           assert.NoError,
+		},
+
+		// errors
+		{
+			name: "error (with config reading)",
+			args: args{
+				reader: iotest.TimeoutReader(strings.NewReader(`[
+					{
+						"name": "github",
+						"options": {
+							"owner": "one",
+							"pageSize": 23
+						}
+					},
+					{
+						"name": "bitbucket",
+						"isReference": true,
+						"options": {
+							"workspace": "two",
+							"pageSize": 42
+						}
+					}
+				]`)),
+				logger: &MockLogger{},
+			},
+			wantSources:       nil,
+			wantReferenceName: "",
+			wantErr:           assert.Error,
+		},
+		{
+			name: "error (with config unmarshalling)",
+			args: args{
+				reader: strings.NewReader("["),
+				logger: &MockLogger{},
+			},
+			wantSources:       nil,
+			wantReferenceName: "",
+			wantErr:           assert.Error,
+		},
+		{
+			name: "error (with multiple references)",
+			args: args{
+				reader: strings.NewReader(`[
+					{
+						"name": "github",
+						"isReference": true,
+						"options": {
+							"owner": "one",
+							"pageSize": 23
+						}
+					},
+					{
+						"name": "bitbucket",
+						"isReference": true,
+						"options": {
+							"workspace": "two",
+							"pageSize": 42
+						}
+					}
+				]`),
+				logger: &MockLogger{},
+			},
+			wantSources:       nil,
+			wantReferenceName: "",
+			wantErr:           assert.Error,
+		},
+		{
+			name: "error (with source loading)",
+			args: args{
+				reader: strings.NewReader(`[
+					{
+						"name": "github",
+						"options": {
+							"owner": "one",
+							"pageSize": 23
+						}
+					},
+					{
+						"name": "unknown"
+					}
+				]`),
+				logger: &MockLogger{},
+			},
+			wantSources:       nil,
+			wantReferenceName: "",
+			wantErr:           assert.Error,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotSources, gotReferenceName, err :=
+				LoadConfig(tt.args.reader, tt.args.logger)
+
+			tt.args.logger.(*MockLogger).InnerMock.AssertExpectations(t)
+			assert.Equal(t, tt.wantSources, gotSources)
+			assert.Equal(t, tt.wantReferenceName, gotReferenceName)
+			tt.wantErr(t, err)
+		})
+	}
+}
 
 func TestLoadSource(t *testing.T) {
 	type args struct {
