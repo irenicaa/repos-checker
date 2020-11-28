@@ -13,6 +13,7 @@ import (
 
 func main() {
 	configPath := flag.String("config", "config.json", "")
+	alternativeReferenceName := flag.String("reference", "", "")
 	flag.Parse()
 
 	configFile, err := os.OpenFile(*configPath, os.O_RDONLY, 0)
@@ -25,6 +26,10 @@ func main() {
 	sources, referenceName, err := config.LoadConfig(configFile, logger)
 	if err != nil {
 		log.Fatalf("unable to load the config: %v", err)
+	}
+
+	if *alternativeReferenceName != "" {
+		referenceName = *alternativeReferenceName
 	}
 	if referenceName == "" {
 		log.Fatalf("reference isn't specified")
