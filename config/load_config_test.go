@@ -109,7 +109,7 @@ func TestLoadConfig(t *testing.T) {
 					Logger:    &MockLogger{},
 				},
 			},
-			wantReferenceName: "bitbucket",
+			wantReferenceName: "bitbucket:two",
 			wantErr:           assert.NoError,
 		},
 

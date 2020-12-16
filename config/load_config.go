@@ -43,14 +43,6 @@ func LoadConfig(reader io.Reader, logger loader.Logger) (
 	}
 
 	for _, sourceConfig := range config {
-		if sourceConfig.IsReference {
-			if referenceName != "" {
-				return nil, "", errors.New("more than one source is marked as a reference")
-			}
-
-			referenceName = sourceConfig.Name
-		}
-
 		source, err := LoadSource(sourceConfig, logger)
 		if err != nil {
 			return nil, "", fmt.Errorf(
@@ -58,6 +50,14 @@ func LoadConfig(reader io.Reader, logger loader.Logger) (
 				sourceConfig.Name,
 				err,
 			)
+		}
+
+		if sourceConfig.IsReference {
+			if referenceName != "" {
+				return nil, "", errors.New("more than one source is marked as a reference")
+			}
+
+			referenceName = source.Name()
 		}
 
 		sources = append(sources, source)
