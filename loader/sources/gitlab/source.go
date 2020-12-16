@@ -15,7 +15,7 @@ type Source struct {
 
 // Name ...
 func (source Source) Name() string {
-	return "gitlab"
+	return "gitlab:" + source.Owner
 }
 
 // LoadRepos ...
