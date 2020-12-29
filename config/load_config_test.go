@@ -245,6 +245,25 @@ func TestLoadSource(t *testing.T) {
 			wantErr: assert.NoError,
 		},
 		{
+			name: "github (default page size)",
+			args: args{
+				sourceConfig: SourceConfig{
+					Name: "github",
+					Options: json.RawMessage([]byte(`{
+						"owner": "test",
+						"logger": null
+					}`)),
+				},
+				logger: &MockLogger{},
+			},
+			want: &github.Source{
+				Owner:    "test",
+				PageSize: defaultPageSize,
+				Logger:   &MockLogger{},
+			},
+			wantErr: assert.NoError,
+		},
+		{
 			name: "bitbucket",
 			args: args{
 				sourceConfig: SourceConfig{
@@ -265,6 +284,25 @@ func TestLoadSource(t *testing.T) {
 			wantErr: assert.NoError,
 		},
 		{
+			name: "bitbucket (default page size)",
+			args: args{
+				sourceConfig: SourceConfig{
+					Name: "bitbucket",
+					Options: json.RawMessage([]byte(`{
+						"workspace": "test",
+						"logger": null
+					}`)),
+				},
+				logger: &MockLogger{},
+			},
+			want: &bitbucket.Source{
+				Workspace: "test",
+				PageSize:  defaultPageSize,
+				Logger:    &MockLogger{},
+			},
+			wantErr: assert.NoError,
+		},
+		{
 			name: "gitlab",
 			args: args{
 				sourceConfig: SourceConfig{
@@ -280,6 +318,25 @@ func TestLoadSource(t *testing.T) {
 			want: &gitlab.Source{
 				Owner:    "test",
 				PageSize: 23,
+				Logger:   &MockLogger{},
+			},
+			wantErr: assert.NoError,
+		},
+		{
+			name: "gitlab (default page size)",
+			args: args{
+				sourceConfig: SourceConfig{
+					Name: "gitlab",
+					Options: json.RawMessage([]byte(`{
+						"owner": "test",
+						"logger": null
+					}`)),
+				},
+				logger: &MockLogger{},
+			},
+			want: &gitlab.Source{
+				Owner:    "test",
+				PageSize: defaultPageSize,
 				Logger:   &MockLogger{},
 			},
 			wantErr: assert.NoError,

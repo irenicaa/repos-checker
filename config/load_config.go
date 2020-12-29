@@ -15,6 +15,8 @@ import (
 	"github.com/irenicaa/repos-checker/loader/sources/gitlab"
 )
 
+const defaultPageSize = 100
+
 // Config ...
 type Config []SourceConfig
 
@@ -74,11 +76,11 @@ func LoadSource(sourceConfig SourceConfig, logger loader.Logger) (
 	var source loader.Source
 	switch sourceConfig.Name {
 	case "github":
-		source = &github.Source{Logger: logger}
+		source = &github.Source{PageSize: defaultPageSize, Logger: logger}
 	case "bitbucket":
-		source = &bitbucket.Source{Logger: logger}
+		source = &bitbucket.Source{PageSize: defaultPageSize, Logger: logger}
 	case "gitlab":
-		source = &gitlab.Source{Logger: logger}
+		source = &gitlab.Source{PageSize: defaultPageSize, Logger: logger}
 	case "file-system":
 		source = &filesystem.Source{Logger: logger}
 	case "external":
