@@ -9,6 +9,7 @@ import (
 // Source ...
 type Source struct {
 	Owner    string
+	IsGroup  bool
 	PageSize int
 	Logger   loader.Logger `json:"-"`
 }
@@ -23,7 +24,7 @@ func (source Source) LoadRepos() ([]models.RepoState, error) {
 	return sourceutils.LoadRepos(
 		source.Name(),
 		func(page int) ([]string, error) {
-			return GetReposPage(source.Owner, source.PageSize, page)
+			return GetReposPage(source.Owner, source.IsGroup, source.PageSize, page)
 		},
 		GetLastCommit,
 		source.Logger,
