@@ -26,6 +26,8 @@ func SendRequest(
 	if err != nil {
 		return fmt.Errorf("unable to send the request: %v", err)
 	}
+	defer response.Body.Close()
+
 	if response.StatusCode != http.StatusOK {
 		return fmt.Errorf(
 			"request was failed with the status: %d",
