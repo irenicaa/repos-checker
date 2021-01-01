@@ -28,16 +28,17 @@ func SendRequest(
 	}
 	defer response.Body.Close()
 
-	if response.StatusCode != http.StatusOK {
-		return fmt.Errorf(
-			"request was failed with the status: %d",
-			response.StatusCode,
-		)
-	}
-
 	responseBytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return fmt.Errorf("unable to read the request body: %v", err)
+	}
+
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf(
+			"request was failed: %d %s",
+			response.StatusCode,
+			responseBytes,
+		)
 	}
 
 	if err = json.Unmarshal(responseBytes, responseData); err != nil {
