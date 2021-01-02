@@ -20,6 +20,7 @@ import (
 func main() {
 	source := flag.String("source", "", "")
 	owner := flag.String("owner", "", "")
+	isGroup := flag.Bool("group", false, "")
 	pageSize := flag.Int("pageSize", 100, "")
 	basePath := flag.String("path", "..", "")
 	command := flag.String("command", "./tools/test_tool.bash ..", "")
@@ -58,6 +59,7 @@ func main() {
 
 		sourceInstance = gitlab.Source{
 			Owner:    *owner,
+			IsGroup:  *isGroup,
 			PageSize: *pageSize,
 			Logger:   logger,
 		}
