@@ -3,6 +3,7 @@ package external
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/irenicaa/repos-checker/models"
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
@@ -10,7 +11,6 @@ import (
 
 // Source ...
 type Source struct {
-	AdditionalName       string
 	Command              string
 	Arguments            []string
 	WorkingDirectory     string
@@ -19,7 +19,21 @@ type Source struct {
 
 // Name ...
 func (source Source) Name() string {
-	return "external:" + source.AdditionalName
+	var environmentVariablesPairs []string
+	for name, value := range source.EnvironmentVariables {
+		pair := name + "=" + value
+		environmentVariablesPairs = append(environmentVariablesPairs, pair)
+	}
+
+	environmentVariables := strings.Join(environmentVariablesPairs, " ")
+	arguments := strings.Join(source.Arguments, " ")
+	return fmt.Sprintf(
+		"external:%s:%s %s %s",
+		source.WorkingDirectory,
+		environmentVariables,
+		source.Command,
+		arguments,
+	)
 }
 
 // LoadRepos ...

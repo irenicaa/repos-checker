@@ -72,9 +72,8 @@ func main() {
 		}
 
 		sourceInstance = external.Source{
-			AdditionalName: "test",
-			Command:        commandParts[0],
-			Arguments:      commandParts[1:],
+			Command:   commandParts[0],
+			Arguments: commandParts[1:],
 		}
 	default:
 		log.Fatal("unknown source")
