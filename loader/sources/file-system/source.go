@@ -22,16 +22,7 @@ func (source Source) LoadRepos() ([]models.RepoState, error) {
 	return sourceutils.LoadRepos(
 		source.Name(),
 		func(page int) ([]string, error) {
-			if page > 1 {
-				return nil, nil
-			}
-
-			repos, err := GetRepos(source.BasePath)
-			if err == ErrItIsRepo {
-				return []string{source.BasePath}, nil
-			}
-
-			return repos, err
+			return GetReposPage(source.BasePath, page)
 		},
 		GetLastCommit,
 		source.Logger,

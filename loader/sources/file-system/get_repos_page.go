@@ -51,3 +51,17 @@ func GetRepos(basePath string) ([]string, error) {
 
 	return allReposPaths, nil
 }
+
+// GetReposPage ...
+func GetReposPage(basePath string, page int) ([]string, error) {
+	if page > 1 {
+		return nil, nil
+	}
+
+	repos, err := GetRepos(basePath)
+	if err == ErrItIsRepo {
+		return []string{basePath}, nil
+	}
+
+	return repos, err
+}
