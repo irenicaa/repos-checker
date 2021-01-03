@@ -6,6 +6,19 @@ import (
 	"os/exec"
 )
 
+// PrepareEnvironmentVariables ...
+func PrepareEnvironmentVariables(
+	environmentVariables map[string]string,
+) []string {
+	var environmentVariablesPairs []string
+	for name, value := range environmentVariables {
+		pair := name + "=" + value
+		environmentVariablesPairs = append(environmentVariablesPairs, pair)
+	}
+
+	return environmentVariablesPairs
+}
+
 // RunCommand ...
 func RunCommand(
 	name string,
@@ -15,11 +28,7 @@ func RunCommand(
 ) ([]byte, error) {
 	command := exec.Command(name, arguments...)
 	command.Dir = workingDirectory
-
-	for key, value := range environmentVariables {
-		entry := key + "=" + value
-		command.Env = append(command.Env, entry)
-	}
+	command.Env = PrepareEnvironmentVariables(environmentVariables)
 
 	var stdoutBuffer bytes.Buffer
 	command.Stdout = &stdoutBuffer

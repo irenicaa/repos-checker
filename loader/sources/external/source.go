@@ -19,14 +19,12 @@ type Source struct {
 
 // Name ...
 func (source Source) Name() string {
-	var environmentVariablesPairs []string
-	for name, value := range source.EnvironmentVariables {
-		pair := name + "=" + value
-		environmentVariablesPairs = append(environmentVariablesPairs, pair)
-	}
-
+	environmentVariablesPairs :=
+		systemutils.PrepareEnvironmentVariables(source.EnvironmentVariables)
 	environmentVariables := strings.Join(environmentVariablesPairs, " ")
+
 	arguments := strings.Join(source.Arguments, " ")
+
 	return fmt.Sprintf(
 		"external:%s:%s %s %s",
 		source.WorkingDirectory,
