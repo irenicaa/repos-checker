@@ -26,7 +26,12 @@ func (source Source) LoadRepos() ([]models.RepoState, error) {
 				return nil, nil
 			}
 
-			return GetRepos(source.BasePath)
+			repos, err := GetRepos(source.BasePath)
+			if err == ErrItIsRepo {
+				return []string{source.BasePath}, nil
+			}
+
+			return repos, err
 		},
 		GetLastCommit,
 		source.Logger,
