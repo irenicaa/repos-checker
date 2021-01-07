@@ -56,14 +56,14 @@ func TestLoadSources(t *testing.T) {
 				logger: &MockLogger{},
 			},
 			want: []models.SourceState{
-				models.SourceState{
+				{
 					Name: "source-one",
 					Repos: []models.RepoState{
 						{Name: "one", LastCommit: "100"},
 						{Name: "two", LastCommit: "200"},
 					},
 				},
-				models.SourceState{
+				{
 					Name: "source-two",
 					Repos: []models.RepoState{
 						{Name: "three", LastCommit: "300"},
@@ -112,7 +112,7 @@ func TestLoadSources(t *testing.T) {
 				}(),
 			},
 			want: []models.SourceState{
-				models.SourceState{
+				{
 					Name: "source-two",
 					Repos: []models.RepoState{
 						{Name: "three", LastCommit: "300"},

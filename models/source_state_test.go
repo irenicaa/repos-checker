@@ -79,14 +79,14 @@ func TestFilterNonemptySources(t *testing.T) {
 			name: "with full data",
 			args: args{
 				sourceStates: []SourceState{
-					SourceState{
+					{
 						Name: "source-one",
 						Repos: []RepoState{
 							{Name: "one", LastCommit: "100"},
 							{Name: "two", LastCommit: "200"},
 						},
 					},
-					SourceState{
+					{
 						Name: "source-two",
 						Repos: []RepoState{
 							{Name: "three", LastCommit: "300"},
@@ -96,14 +96,14 @@ func TestFilterNonemptySources(t *testing.T) {
 				},
 			},
 			want: []SourceState{
-				SourceState{
+				{
 					Name: "source-one",
 					Repos: []RepoState{
 						{Name: "one", LastCommit: "100"},
 						{Name: "two", LastCommit: "200"},
 					},
 				},
-				SourceState{
+				{
 					Name: "source-two",
 					Repos: []RepoState{
 						{Name: "three", LastCommit: "300"},
@@ -116,14 +116,14 @@ func TestFilterNonemptySources(t *testing.T) {
 			name: "without a name",
 			args: args{
 				sourceStates: []SourceState{
-					SourceState{
+					{
 						Name: "",
 						Repos: []RepoState{
 							{Name: "one", LastCommit: "100"},
 							{Name: "two", LastCommit: "200"},
 						},
 					},
-					SourceState{
+					{
 						Name: "source-two",
 						Repos: []RepoState{
 							{Name: "three", LastCommit: "300"},
@@ -133,14 +133,14 @@ func TestFilterNonemptySources(t *testing.T) {
 				},
 			},
 			want: []SourceState{
-				SourceState{
+				{
 					Name: "",
 					Repos: []RepoState{
 						{Name: "one", LastCommit: "100"},
 						{Name: "two", LastCommit: "200"},
 					},
 				},
-				SourceState{
+				{
 					Name: "source-two",
 					Repos: []RepoState{
 						{Name: "three", LastCommit: "300"},
@@ -153,11 +153,11 @@ func TestFilterNonemptySources(t *testing.T) {
 			name: "without repos",
 			args: args{
 				sourceStates: []SourceState{
-					SourceState{
+					{
 						Name:  "source-one",
 						Repos: nil,
 					},
-					SourceState{
+					{
 						Name: "source-two",
 						Repos: []RepoState{
 							{Name: "three", LastCommit: "300"},
@@ -167,11 +167,11 @@ func TestFilterNonemptySources(t *testing.T) {
 				},
 			},
 			want: []SourceState{
-				SourceState{
+				{
 					Name:  "source-one",
 					Repos: nil,
 				},
-				SourceState{
+				{
 					Name: "source-two",
 					Repos: []RepoState{
 						{Name: "three", LastCommit: "300"},
@@ -184,11 +184,11 @@ func TestFilterNonemptySources(t *testing.T) {
 			name: "with an empty source state",
 			args: args{
 				sourceStates: []SourceState{
-					SourceState{
+					{
 						Name:  "",
 						Repos: nil,
 					},
-					SourceState{
+					{
 						Name: "source-two",
 						Repos: []RepoState{
 							{Name: "three", LastCommit: "300"},
@@ -198,7 +198,7 @@ func TestFilterNonemptySources(t *testing.T) {
 				},
 			},
 			want: []SourceState{
-				SourceState{
+				{
 					Name: "source-two",
 					Repos: []RepoState{
 						{Name: "three", LastCommit: "300"},
@@ -211,11 +211,11 @@ func TestFilterNonemptySources(t *testing.T) {
 			name: "without a nonempty source state",
 			args: args{
 				sourceStates: []SourceState{
-					SourceState{
+					{
 						Name:  "",
 						Repos: nil,
 					},
-					SourceState{
+					{
 						Name:  "",
 						Repos: nil,
 					},
