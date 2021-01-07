@@ -12,8 +12,10 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "config.json", "")
-	alternativeReferenceName := flag.String("reference", "", "")
+	configPath :=
+		flag.String("config", "config.json", "path to a config file of sources")
+	alternativeReferenceName :=
+		flag.String("reference", "", "forced name of a reference source")
 	flag.Parse()
 
 	configFile, err := os.OpenFile(*configPath, os.O_RDONLY, 0)
