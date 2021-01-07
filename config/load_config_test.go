@@ -365,7 +365,6 @@ func TestLoadSource(t *testing.T) {
 				sourceConfig: SourceConfig{
 					Name: "external",
 					Options: json.RawMessage([]byte(`{
-						"additionalName": "one",
 						"command": "two",
 						"arguments": ["three", "four"],
 						"workingDirectory": "five",
@@ -375,7 +374,6 @@ func TestLoadSource(t *testing.T) {
 				logger: &MockLogger{},
 			},
 			want: &external.Source{
-				AdditionalName:       "one",
 				Command:              "two",
 				Arguments:            []string{"three", "four"},
 				WorkingDirectory:     "five",
