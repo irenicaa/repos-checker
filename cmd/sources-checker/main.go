@@ -18,12 +18,18 @@ import (
 )
 
 func main() {
-	source := flag.String("source", "", "")
-	owner := flag.String("owner", "", "")
-	isGroup := flag.Bool("group", false, "")
-	pageSize := flag.Int("pageSize", 100, "")
-	basePath := flag.String("path", "..", "")
-	command := flag.String("command", "./tools/test_tool.bash ..", "")
+	source := flag.String("source", "",
+		"source name (allowed: 'github', 'gitlab', 'bitbucket', 'file-system', and 'external')")
+	owner := flag.String("owner", "",
+		"repo owner (for 'github', 'gitlab', and 'bitbucket' sources)")
+	isGroup := flag.Bool("group", false,
+		"flag requiring the username to be treated as a group name (for 'gitlab' source)")
+	pageSize := flag.Int("pageSize", 100,
+		"page size for API requests (for 'github', 'gitlab', and 'bitbucket' sources)")
+	basePath := flag.String("path", "..",
+		"base path containing repos (for 'file-system' source)")
+	command := flag.String("command", "./tools/test_tool.bash ..",
+		"external program call in the form 'command arg1 arg2 ...' returning a source state in JSON (for 'external' source)")
 	flag.Parse()
 	if *source == "" {
 		log.Fatal("source is unspecified")
