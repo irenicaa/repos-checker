@@ -16,6 +16,11 @@ $ go get github.com/irenicaa/repos-checker/...
 - [repos-checker](cmd/repos-checker)
 - [sources-checker](cmd/sources-checker)
 
+## Docs
+
+- [config.schema.json](docs/config.schema.json) &mdash; JSON Schema for config of sources
+- [config.example.json](docs/config.example.json) &mdash; example for config of sources
+
 ## License
 
 The MIT License (MIT)

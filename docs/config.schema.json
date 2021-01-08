@@ -1,0 +1,190 @@
+{
+  "type": "array",
+  "items": {
+    "anyOf": [
+      { "$ref": "#/$defs/githubConfig" },
+      { "$ref": "#/$defs/gitlabConfig" },
+      { "$ref": "#/$defs/bitbucketConfig" },
+      { "$ref": "#/$defs/fileSystemConfig" },
+      { "$ref": "#/$defs/externalConfig" },
+      { "$ref": "#/$defs/multiSourceConfig" }
+    ]
+  },
+  "$defs": {
+    "githubConfig": {
+      "type": "object",
+      "required": ["name", "options"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "github"
+        },
+        "isReference": {
+          "type": "boolean",
+          "default": false
+        },
+        "options": {
+          "type": "object",
+          "required": ["owner"],
+          "properties": {
+            "owner": {
+              "type": "string"
+            },
+            "pageSize": {
+              "type": "integer",
+              "default": 100
+            }
+          }
+        }
+      }
+    },
+    "gitlabConfig": {
+      "type": "object",
+      "required": ["name", "options"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "gitlab"
+        },
+        "isReference": {
+          "type": "boolean",
+          "default": false
+        },
+        "options": {
+          "type": "object",
+          "required": ["owner"],
+          "properties": {
+            "owner": {
+              "type": "string"
+            },
+            "isGroup": {
+              "type": "boolean",
+              "default": false
+            },
+            "pageSize": {
+              "type": "integer",
+              "default": 100
+            }
+          }
+        }
+      }
+    },
+    "bitbucketConfig": {
+      "type": "object",
+      "required": ["name", "options"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "bitbucket"
+        },
+        "isReference": {
+          "type": "boolean",
+          "default": false
+        },
+        "options": {
+          "type": "object",
+          "required": ["workspace"],
+          "properties": {
+            "workspace": {
+              "type": "string"
+            },
+            "pageSize": {
+              "type": "integer",
+              "default": 100
+            }
+          }
+        }
+      }
+    },
+    "fileSystemConfig": {
+      "type": "object",
+      "required": ["name", "options"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "file-system"
+        },
+        "isReference": {
+          "type": "boolean",
+          "default": false
+        },
+        "options": {
+          "type": "object",
+          "required": ["basePath"],
+          "properties": {
+            "basePath": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "externalConfig": {
+      "type": "object",
+      "required": ["name", "options"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "external"
+        },
+        "isReference": {
+          "type": "boolean",
+          "default": false
+        },
+        "options": {
+          "type": "object",
+          "required": ["command"],
+          "properties": {
+            "command": {
+              "type": "string"
+            },
+            "arguments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "workingDirectory": {
+              "type": "string"
+            },
+            "environmentVariables": {
+              "type": "object",
+              "patternProperties": {
+                "[A-Za-z_]\\w*": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "multiSourceConfig": {
+      "type": "object",
+      "required": ["name", "subSources"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "multi-source"
+        },
+        "isReference": {
+          "type": "boolean",
+          "default": false
+        },
+        "subSources": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "$ref": "#/$defs/githubConfig" },
+              { "$ref": "#/$defs/gitlabConfig" },
+              { "$ref": "#/$defs/bitbucketConfig" },
+              { "$ref": "#/$defs/fileSystemConfig" },
+              { "$ref": "#/$defs/externalConfig" },
+              { "$ref": "#/$defs/multiSourceConfig" }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

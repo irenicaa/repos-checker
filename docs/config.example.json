@@ -1,0 +1,32 @@
+[
+  {
+    "name": "multi-source",
+    "isReference": true,
+    "subSources": [
+      {
+        "name": "github",
+        "options": {
+          "owner": "irenicaa"
+        }
+      },
+      {
+        "name": "bitbucket",
+        "options": {
+          "workspace": "irenicaa"
+        }
+      }
+    ]
+  },
+  {
+    "name": "file-system",
+    "options": {
+      "basePath": "/home/irenicaa/go/src/github.com/irenicaa"
+    }
+  },
+  {
+    "name": "file-system",
+    "options": {
+      "basePath": "/media/irenicaa/external-hdd/go-projects"
+    }
+  }
+]
