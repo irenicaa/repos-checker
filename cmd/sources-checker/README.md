@@ -1,5 +1,7 @@
 # sources-checker
 
+The utility for getting a list of the latest commits of repos from a specific source.
+
 ## Usage
 
 ```

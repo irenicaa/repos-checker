@@ -1,5 +1,7 @@
 # repos-checker
 
+The utility for checking that repo mirrors are up to date. Config of sources is described in an external file in JSON. (For details about its format, see the `README.md` file at the root of the project.)
+
 ## Usage
 
 ```

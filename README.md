@@ -5,6 +5,10 @@
 [![Build Status](https://travis-ci.org/irenicaa/repos-checker.svg?branch=master)](https://travis-ci.org/irenicaa/repos-checker)
 [![codecov](https://codecov.io/gh/irenicaa/repos-checker/branch/master/graph/badge.svg)](https://codecov.io/gh/irenicaa/repos-checker)
 
+The library and the utilities for checking that repo mirrors are up to date. Checking is done by comparing the latest commits in each mirror of the repo.
+
+Cloud services (GitHub, GitLab, and Bitbucket), local copies, and any external program that returns states of repos are supported as sources of mirrors. Also, any such sources can be combined into one with merging of the lists of the repos they contain.
+
 ## Installation
 
 ```
@@ -13,8 +17,8 @@ $ go get github.com/irenicaa/repos-checker/...
 
 ## Tools
 
-- [repos-checker](cmd/repos-checker)
-- [sources-checker](cmd/sources-checker)
+- [repos-checker](cmd/repos-checker) &mdash; utility for checking that repo mirrors are up to date
+- [sources-checker](cmd/sources-checker) &mdash; utility for getting a list of the latest commits of repos from a specific source
 
 ## Docs
 
