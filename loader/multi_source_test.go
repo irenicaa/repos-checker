@@ -98,7 +98,7 @@ func TestMultiSource_LoadRepos(t *testing.T) {
 			wantErr: assert.NoError,
 		},
 		{
-			name: "error",
+			name: "one error",
 			sources: MultiSource{
 				func() Source {
 					source := &MockSource{}
@@ -110,7 +110,44 @@ func TestMultiSource_LoadRepos(t *testing.T) {
 
 					return source
 				}(),
-				&MockSource{},
+				func() Source {
+					repos := []models.RepoState{
+						{Name: "three", LastCommit: "300"},
+						{Name: "four", LastCommit: "400"},
+					}
+
+					source := &MockSource{}
+					source.InnerMock.On("LoadRepos").Return(repos, nil).Times(1)
+
+					return source
+				}(),
+			},
+			want:    nil,
+			wantErr: assert.Error,
+		},
+		{
+			name: "few errors",
+			sources: MultiSource{
+				func() Source {
+					source := &MockSource{}
+					source.InnerMock.On("Name").Return("source-one").Times(1)
+					source.InnerMock.
+						On("LoadRepos").
+						Return(([]models.RepoState)(nil), iotest.ErrTimeout).
+						Times(1)
+
+					return source
+				}(),
+				func() Source {
+					source := &MockSource{}
+					source.InnerMock.On("Name").Return("source-two").Times(1)
+					source.InnerMock.
+						On("LoadRepos").
+						Return(([]models.RepoState)(nil), iotest.ErrTimeout).
+						Times(1)
+
+					return source
+				}(),
 			},
 			want:    nil,
 			wantErr: assert.Error,
@@ -123,7 +160,7 @@ func TestMultiSource_LoadRepos(t *testing.T) {
 			for _, source := range tt.sources {
 				source.(*MockSource).InnerMock.AssertExpectations(t)
 			}
-			assert.Equal(t, tt.want, got)
+			assert.ElementsMatch(t, tt.want, got)
 			tt.wantErr(t, err)
 		})
 	}
