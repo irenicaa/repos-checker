@@ -1,8 +1,10 @@
 package loader
 
 import (
+	"errors"
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/irenicaa/repos-checker/models"
 )
@@ -23,14 +25,37 @@ func (sources MultiSource) Name() string {
 
 // LoadRepos ...
 func (sources MultiSource) LoadRepos() ([]models.RepoState, error) {
+	waiter := sync.WaitGroup{}
+	waiter.Add(len(sources))
+
+	var mutex sync.Mutex
 	repos := []models.RepoState{}
+	errs := []error{}
 	for _, source := range sources {
-		repo, err := source.LoadRepos()
-		if err != nil {
-			return nil, fmt.Errorf("for the %s source: %v", source.Name(), err)
+		go func(source Source) {
+			defer waiter.Done()
+
+			repo, err := source.LoadRepos()
+
+			mutex.Lock()
+			defer mutex.Unlock()
+
+			repos = append(repos, repo...)
+			if err != nil {
+				err = fmt.Errorf("for the %s source: %v", source.Name(), err)
+				errs = append(errs, err)
+			}
+		}(source)
+	}
+
+	waiter.Wait()
+	if len(errs) != 0 {
+		var errMessages []string
+		for _, err := range errs {
+			errMessages = append(errMessages, err.Error())
 		}
 
-		repos = append(repos, repo...)
+		return nil, errors.New(strings.Join(errMessages, "; "))
 	}
 
 	return repos, nil
