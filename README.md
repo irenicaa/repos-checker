@@ -2,7 +2,7 @@
 
 [![GoDoc](https://godoc.org/github.com/irenicaa/repos-checker?status.svg)](https://godoc.org/github.com/irenicaa/repos-checker)
 [![Go Report Card](https://goreportcard.com/badge/github.com/irenicaa/repos-checker)](https://goreportcard.com/report/github.com/irenicaa/repos-checker)
-[![Build Status](https://travis-ci.org/irenicaa/repos-checker.svg?branch=master)](https://travis-ci.org/irenicaa/repos-checker)
+[![Build Status](https://app.travis-ci.com/irenicaa/repos-checker.svg?branch=master)](https://app.travis-ci.com/irenicaa/repos-checker)
 [![codecov](https://codecov.io/gh/irenicaa/repos-checker/branch/master/graph/badge.svg)](https://codecov.io/gh/irenicaa/repos-checker)
 
 The library and the utilities for checking that repo mirrors are up to date. Checking is done by comparing the latest commits in each mirror of the repo.
