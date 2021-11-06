@@ -21,7 +21,7 @@ func GetLastCommit(repoPath string) (models.RepoState, error) {
 	var commits []commit
 	escapedRepoPath := url.PathEscape(repoPath)
 	endpoint := fmt.Sprintf("/projects/%s/repository/commits", escapedRepoPath)
-	if err := SendRequest(endpoint, parameters, &commits); err != nil {
+	if err := LoadData(endpoint, parameters, &commits); err != nil {
 		return models.RepoState{}, err
 	}
 	if len(commits) == 0 {

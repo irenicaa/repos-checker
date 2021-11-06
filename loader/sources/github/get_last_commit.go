@@ -19,7 +19,7 @@ func GetLastCommit(owner string, repo string) (models.RepoState, error) {
 
 	var commits []commit
 	endpoint := fmt.Sprintf("/repos/%s/%s/commits", owner, repo)
-	if err := SendRequest(endpoint, parameters, &commits); err != nil {
+	if err := LoadData(endpoint, parameters, &commits); err != nil {
 		return models.RepoState{}, err
 	}
 	if len(commits) == 0 {

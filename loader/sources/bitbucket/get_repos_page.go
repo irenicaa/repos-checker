@@ -23,7 +23,7 @@ func GetReposPage(workspace string, pageSize int, page int) ([]string, error) {
 
 	var repos reposPage
 	endpoint := fmt.Sprintf("/repositories/%s", workspace)
-	if err := SendRequest(endpoint, parameters, &repos); err != nil {
+	if err := LoadData(endpoint, parameters, &repos); err != nil {
 		return nil, err
 	}
 

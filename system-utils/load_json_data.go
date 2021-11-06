@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-// SendRequest ...
-func SendRequest(
+// LoadJSONData ...
+func LoadJSONData(
 	url string,
 	authHeader string,
 	responseData interface{},

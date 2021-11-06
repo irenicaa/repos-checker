@@ -23,7 +23,7 @@ func GetLastCommit(workspace string, repo string) (models.RepoState, error) {
 
 	var commits commitsPage
 	endpoint := fmt.Sprintf("/repositories/%s/%s/commits", workspace, repo)
-	if err := SendRequest(endpoint, parameters, &commits); err != nil {
+	if err := LoadData(endpoint, parameters, &commits); err != nil {
 		return models.RepoState{}, err
 	}
 	if len(commits.Values) == 0 {

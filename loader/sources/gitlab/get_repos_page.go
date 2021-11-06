@@ -34,7 +34,7 @@ func GetReposPage(owner string, isGroup bool, pageSize int, page int) (
 
 	var projects []project
 	endpoint := fmt.Sprintf("/%s/%s/projects", entity, owner)
-	if err := SendRequest(endpoint, parameters, &projects); err != nil {
+	if err := LoadData(endpoint, parameters, &projects); err != nil {
 		return nil, err
 	}
 
