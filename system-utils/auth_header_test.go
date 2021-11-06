@@ -92,3 +92,48 @@ func TestMakeBasicAuthHeader(t *testing.T) {
 		})
 	}
 }
+
+func TestMakeBearerAuthHeader(t *testing.T) {
+	type args struct {
+		tokenEnv env
+	}
+
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "without the token",
+			args: args{
+				tokenEnv: env{name: "TEST_TOKEN", isNotSet: true},
+			},
+			want: "",
+		},
+		{
+			name: "with the empty token",
+			args: args{
+				tokenEnv: env{name: "TEST_TOKEN", value: ""},
+			},
+			want: "",
+		},
+		{
+			name: "with the nonempty token",
+			args: args{
+				tokenEnv: env{name: "TEST_TOKEN", value: "token"},
+			},
+			want: "Bearer token",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := updateEnvs([]env{tt.args.tokenEnv})
+			require.NoError(t, err)
+			defer unsetEnvs([]env{tt.args.tokenEnv})
+
+			got := MakeBearerAuthHeader(tt.args.tokenEnv.name)
+
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
