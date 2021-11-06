@@ -2,6 +2,7 @@ package github
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
@@ -25,5 +26,10 @@ func LoadData(
 	url := MakeURL(endpoint, parameters)
 	authHeader :=
 		systemutils.MakeBasicAuthHeader("GITHUB_USERNAME", "GITHUB_TOKEN")
-	return systemutils.LoadJSONData(url, authHeader, responseData)
+	return systemutils.LoadJSONData(
+		http.DefaultClient,
+		url,
+		authHeader,
+		responseData,
+	)
 }

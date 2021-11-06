@@ -7,8 +7,14 @@ import (
 	"net/http"
 )
 
+// HTTPClient ...
+type HTTPClient interface {
+	Do(request *http.Request) (*http.Response, error)
+}
+
 // LoadJSONData ...
 func LoadJSONData(
+	httpClient HTTPClient,
 	url string,
 	authHeader string,
 	responseData interface{},
@@ -22,7 +28,7 @@ func LoadJSONData(
 		request.Header.Add("Authorization", authHeader)
 	}
 
-	response, err := http.DefaultClient.Do(request)
+	response, err := httpClient.Do(request)
 	if err != nil {
 		return fmt.Errorf("unable to send the request: %v", err)
 	}

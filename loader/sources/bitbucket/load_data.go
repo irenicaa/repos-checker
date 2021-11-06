@@ -2,6 +2,7 @@ package bitbucket
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
@@ -25,5 +26,10 @@ func LoadData(
 	url := MakeURL(endpoint, parameters)
 	authHeader :=
 		systemutils.MakeBasicAuthHeader("BITBUCKET_USERNAME", "BITBUCKET_PASSWORD")
-	return systemutils.LoadJSONData(url, authHeader, responseData)
+	return systemutils.LoadJSONData(
+		http.DefaultClient,
+		url,
+		authHeader,
+		responseData,
+	)
 }

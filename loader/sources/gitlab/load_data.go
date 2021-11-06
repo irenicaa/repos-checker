@@ -2,6 +2,7 @@ package gitlab
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	systemutils "github.com/irenicaa/repos-checker/system-utils"
@@ -24,5 +25,10 @@ func LoadData(
 ) error {
 	url := MakeURL(endpoint, parameters)
 	authHeader := systemutils.MakeBearerAuthHeader("GITLAB_TOKEN")
-	return systemutils.LoadJSONData(url, authHeader, responseData)
+	return systemutils.LoadJSONData(
+		http.DefaultClient,
+		url,
+		authHeader,
+		responseData,
+	)
 }
