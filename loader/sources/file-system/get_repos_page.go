@@ -38,6 +38,7 @@ func GetRepos(basePath string) ([]string, error) {
 		case nil:
 		case ErrItIsRepo:
 			allReposPaths = append(allReposPaths, directoryPath)
+			continue
 		default:
 			return nil, fmt.Errorf(
 				"unable to get repos paths from the subdirectory %s: %v",
