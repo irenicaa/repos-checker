@@ -1,6 +1,6 @@
 # repos-checker
 
-The utility for checking that repo mirrors are up to date. Config of sources is described in an external file in JSON. (For details about its format, see the `README.md` file at the root of the project.)
+The utility for checking that repo mirrors are up to date. Config of sources is described in an external file in JSON (see below).
 
 ## Usage
 
@@ -25,6 +25,11 @@ Environment variables:
 - to access Bitbucket:
   - `BITBUCKET_USERNAME` &mdash; Bitbucket username;
   - `BITBUCKET_PASSWORD` &mdash; Bitbucket [app password](https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/).
+
+## Docs
+
+- [config.schema.json](../../docs/config.schema.json) &mdash; JSON Schema for config of sources
+- [config.example.json](../../docs/config.example.json) &mdash; example for config of sources
 
 ## Output Example
 
