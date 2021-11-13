@@ -6,7 +6,11 @@ The utility for getting a list of the latest commits of repos from a specific so
 
 ```
 $ sources-checker -h | -help | --help
-$ sources-checker [options]
+$ sources-checker [-owner STRING -pageSize INTEGER] -source github
+$ sources-checker [-owner STRING -group -pageSize INTEGER] -source gitlab
+$ sources-checker [-owner STRING -pageSize INTEGER] -source bitbucket
+$ sources-checker [-path STRING] -source file-system
+$ sources-checker [-command STRING] -source external
 ```
 
 Options:
