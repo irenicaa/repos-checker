@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/irenicaa/repos-checker/models"
-	systemutils "github.com/irenicaa/repos-checker/system-utils"
+	"github.com/irenicaa/repos-checker/v2/models"
+	systemutils "github.com/irenicaa/repos-checker/v2/system-utils"
 )
 
 // Source ...

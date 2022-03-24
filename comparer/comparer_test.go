@@ -3,7 +3,7 @@ package comparer
 import (
 	"testing"
 
-	"github.com/irenicaa/repos-checker/models"
+	"github.com/irenicaa/repos-checker/v2/models"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/url"
 
-	sourceutils "github.com/irenicaa/repos-checker/loader/sources/source-utils"
-	"github.com/irenicaa/repos-checker/models"
+	sourceutils "github.com/irenicaa/repos-checker/v2/loader/sources/source-utils"
+	"github.com/irenicaa/repos-checker/v2/models"
 )
 
 type commit struct {

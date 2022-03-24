@@ -1,6 +1,6 @@
 package comparer
 
-import "github.com/irenicaa/repos-checker/models"
+import "github.com/irenicaa/repos-checker/v2/models"
 
 // SourceDiff ...
 type SourceDiff struct {

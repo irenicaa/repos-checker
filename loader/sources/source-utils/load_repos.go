@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/irenicaa/repos-checker/loader"
-	"github.com/irenicaa/repos-checker/models"
+	"github.com/irenicaa/repos-checker/v2/loader"
+	"github.com/irenicaa/repos-checker/v2/models"
 )
 
 // ErrNoCommits ...

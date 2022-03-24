@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	reposchecker "github.com/irenicaa/repos-checker"
-	"github.com/irenicaa/repos-checker/config"
+	reposchecker "github.com/irenicaa/repos-checker/v2"
+	"github.com/irenicaa/repos-checker/v2/config"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/irenicaa/repos-checker
+module github.com/irenicaa/repos-checker/v2
 
 go 1.15
 

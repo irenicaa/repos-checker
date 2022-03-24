@@ -7,12 +7,12 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/irenicaa/repos-checker/loader"
-	"github.com/irenicaa/repos-checker/loader/sources/bitbucket"
-	"github.com/irenicaa/repos-checker/loader/sources/external"
-	filesystem "github.com/irenicaa/repos-checker/loader/sources/file-system"
-	"github.com/irenicaa/repos-checker/loader/sources/github"
-	"github.com/irenicaa/repos-checker/loader/sources/gitlab"
+	"github.com/irenicaa/repos-checker/v2/loader"
+	"github.com/irenicaa/repos-checker/v2/loader/sources/bitbucket"
+	"github.com/irenicaa/repos-checker/v2/loader/sources/external"
+	filesystem "github.com/irenicaa/repos-checker/v2/loader/sources/file-system"
+	"github.com/irenicaa/repos-checker/v2/loader/sources/github"
+	"github.com/irenicaa/repos-checker/v2/loader/sources/gitlab"
 )
 
 const defaultPageSize = 100

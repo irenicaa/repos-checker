@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	sourceutils "github.com/irenicaa/repos-checker/loader/sources/source-utils"
-	"github.com/irenicaa/repos-checker/models"
-	systemutils "github.com/irenicaa/repos-checker/system-utils"
+	sourceutils "github.com/irenicaa/repos-checker/v2/loader/sources/source-utils"
+	"github.com/irenicaa/repos-checker/v2/models"
+	systemutils "github.com/irenicaa/repos-checker/v2/system-utils"
 )
 
 // GetRepoName ...

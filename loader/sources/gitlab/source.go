@@ -1,9 +1,9 @@
 package gitlab
 
 import (
-	"github.com/irenicaa/repos-checker/loader"
-	sourceutils "github.com/irenicaa/repos-checker/loader/sources/source-utils"
-	"github.com/irenicaa/repos-checker/models"
+	"github.com/irenicaa/repos-checker/v2/loader"
+	sourceutils "github.com/irenicaa/repos-checker/v2/loader/sources/source-utils"
+	"github.com/irenicaa/repos-checker/v2/models"
 )
 
 // Source ...
