@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"net/url"
 
-	systemutils "github.com/irenicaa/repos-checker/system-utils"
+	httputils "github.com/irenicaa/go-http-utils"
+	"github.com/irenicaa/go-http-utils/auth"
 )
 
 // MakeURL ...
@@ -25,8 +26,8 @@ func LoadData(
 ) error {
 	url := MakeURL(endpoint, parameters)
 	authHeader :=
-		systemutils.MakeBasicAuthHeader("BITBUCKET_USERNAME", "BITBUCKET_PASSWORD")
-	return systemutils.LoadJSONData(
+		auth.MakeBasicAuthHeader("BITBUCKET_USERNAME", "BITBUCKET_PASSWORD")
+	return httputils.LoadJSONData(
 		http.DefaultClient,
 		url,
 		authHeader,

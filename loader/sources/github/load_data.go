@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"net/url"
 
-	systemutils "github.com/irenicaa/repos-checker/system-utils"
+	httputils "github.com/irenicaa/go-http-utils"
+	"github.com/irenicaa/go-http-utils/auth"
 )
 
 // MakeURL ...
@@ -24,9 +25,8 @@ func LoadData(
 	responseData interface{},
 ) error {
 	url := MakeURL(endpoint, parameters)
-	authHeader :=
-		systemutils.MakeBasicAuthHeader("GITHUB_USERNAME", "GITHUB_TOKEN")
-	return systemutils.LoadJSONData(
+	authHeader := auth.MakeBasicAuthHeader("GITHUB_USERNAME", "GITHUB_TOKEN")
+	return httputils.LoadJSONData(
 		http.DefaultClient,
 		url,
 		authHeader,
