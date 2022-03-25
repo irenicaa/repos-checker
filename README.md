@@ -1,7 +1,7 @@
 # Repos Checker
 
-[![GoDoc](https://godoc.org/github.com/irenicaa/repos-checker?status.svg)](https://godoc.org/github.com/irenicaa/repos-checker)
-[![Go Report Card](https://goreportcard.com/badge/github.com/irenicaa/repos-checker)](https://goreportcard.com/report/github.com/irenicaa/repos-checker)
+[![GoDoc](https://godoc.org/github.com/irenicaa/repos-checker/v2?status.svg)](https://godoc.org/github.com/irenicaa/repos-checker/v2)
+[![Go Report Card](https://goreportcard.com/badge/github.com/irenicaa/repos-checker/v2)](https://goreportcard.com/report/github.com/irenicaa/repos-checker/v2)
 [![Build Status](https://app.travis-ci.com/irenicaa/repos-checker.svg?branch=master)](https://app.travis-ci.com/irenicaa/repos-checker)
 [![codecov](https://codecov.io/gh/irenicaa/repos-checker/branch/master/graph/badge.svg)](https://codecov.io/gh/irenicaa/repos-checker)
 
